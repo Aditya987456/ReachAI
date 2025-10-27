@@ -1,5 +1,5 @@
 import { ApiRouteConfig } from "motia";
-
+import { v4 as uuidv4 } from "uuid";
 
 /*
 Every route needs its own config because that’s how Motia registers it in the internal routing table (instead of using app.get() or app.post() manually like Express).
@@ -117,7 +117,53 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
           }
         }
 
-        //validate the email using regex or Zod....
+        //validate the email using regex or Zod....????
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+          return {
+            status:400,
+            body:{
+              error:"Invalid email formate",
+            }
+          }
+        }
+
+        //creating jobId
+        const jobId = uuidv4();
+
+        //set the information in this job.
+        await state.set(`Job : ${jobId}`, {
+          //data of the job
+          jobId,
+          channel,
+          email,
+          status:"queued",
+          CreatedAt: new Date().toISOString()
+        })
+
+        logger.info('-------------Job created ------------ ', {jobId, email, channel})
+
+
+
+        //like pub sub model -- like broadcast the info to other step or particular steps
+        //i think we don't need here again if we already defined in config it automatically trigger here no manual need.
+        await emit({
+          topic:"yt.submit",
+          //data that we providong to bradcast after emit
+          data:{
+            jobId,
+            channel, email
+          }
+        })
+
+      return{
+        status:200,
+        body:{
+          success:true,
+          jobId,
+          message:"Your request has been queued. You will get an email soon with improved suggestions for your youtube videos"
+        }
+      }
         
         
     } catch (error:any) {
