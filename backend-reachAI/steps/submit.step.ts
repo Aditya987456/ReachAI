@@ -149,10 +149,11 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
         //i think we don't need here again if we already defined in config it automatically trigger here no manual need.
         await emit({
           topic:"yt.submit",
-          //data that we providong to bradcast after emit
+          //data that we providong to broadcast after emit --> to another event.
           data:{
             jobId,
-            channel, email
+            channel,
+            email
           }
         })
 

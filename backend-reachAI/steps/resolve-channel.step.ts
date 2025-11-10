@@ -10,7 +10,7 @@ When going from API → Step, use subscribes.
 When going from Step → Step, use listensOn.
 */
 
-export const config:EventConfig = {
+export const config= {
     name:"ResolveChannel",
     type:'event',
     subscribes:["yt.submit"],
@@ -110,6 +110,8 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             topic:'yt.channel.resolved',
             data:{
                 jobId,
+                channelId,
+                channelName,
                 email
             }
         })
