@@ -131,7 +131,7 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
         //creating jobId
         const jobId = uuidv4();
 
-        //set the information in this job.
+        //set the information in this job.-- abhi jo request ua uska ek jobId ban gaya.
         await state.set(`Job : ${jobId}`, {
           //data of the job
           jobId,

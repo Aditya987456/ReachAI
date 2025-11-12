@@ -129,6 +129,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
         const jobData = await state.get(`job:${jobId}`)
 
+        //set the status of the job to failed.
         await state.set(`job:${jobId}`,{
             ...jobData,
             status:'failed',

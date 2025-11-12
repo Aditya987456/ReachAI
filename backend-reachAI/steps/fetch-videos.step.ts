@@ -16,7 +16,7 @@ export const config= {
 interface Video{
     videoId: string
     title:string
-    //description:string
+    description:string
     //tags:string
     url:string
     publishedAt:string
@@ -59,7 +59,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         })
 
         const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet
-            &channelId=${channelId}&order=date&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`
+            &channelId=${channelId}&order=date&type=video&maxResults=15&key=${YOUTUBE_API_KEY}`
 
         const Response = await fetch(searchURL)
         const ytResponseData = await Response.json()     //read about this like what are the things it returns
@@ -71,6 +71,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
                 channelId
             })
 
+            //updating that videos not able to gets fetched
             await state.set(`job:${jobId}`,{
                 ...jobData,
                 status:'failed',
@@ -85,13 +86,13 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
                     error:'No videos found for this channel'
                 }
             })
-
-
             return;
+
         }else{
             //means response is there from the lastest 5 videos of the channel.
             const videos:Video[] = ytResponseData.items.map( (items:any)=>({
                 videoId:items.id.videoId,
+                description: items.snippet.description.slice(0, 200), // short summary
                 title:items.snippet.title,
                 url:`https://www.youtube.com/watch?v=${items.id.videoId}`,
                 publishedAt:items.snippet.publishedAt,
@@ -103,6 +104,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
                 videoCount:videos.length
             })
 
+            //updating the status of the job
             await state.set(`job:${jobId}`,{
                 ...jobData,
                 status:'video fetched',
