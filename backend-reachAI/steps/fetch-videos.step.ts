@@ -59,7 +59,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         })
 
         const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet
-            &channelId=${channelId}&order=date&type=video&maxResults=15&key=${YOUTUBE_API_KEY}`
+            &channelId=${channelId}&order=date&type=video&maxResults=10&key=${YOUTUBE_API_KEY}`
 
         const Response = await fetch(searchURL)
         const ytResponseData = await Response.json()     //read about this like what are the things it returns
@@ -92,7 +92,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             //means response is there from the lastest 5 videos of the channel.
             const videos:Video[] = ytResponseData.items.map( (items:any)=>({
                 videoId:items.id.videoId,
-                description: items.snippet.description.slice(0, 200), // short summary
+                description: items.snippet.description ,
                 title:items.snippet.title,
                 url:`https://www.youtube.com/watch?v=${items.id.videoId}`,
                 publishedAt:items.snippet.publishedAt,

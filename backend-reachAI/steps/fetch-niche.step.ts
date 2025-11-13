@@ -8,6 +8,184 @@ import { EventConfig, Logger } from "motia";
 export const config= {
     name:"fetch-niche",
     type:'event',
-    subscribes:["yt.videos.filtered"],
+    subscribes:["yt.videos.fetched"],
     emits:["yt.niche.fetched", "yt.niche.error"]
+}
+
+
+
+
+export const handler = async (eventData:any , { emit, logger, state }:any)=>{
+
+    let jobId:string | undefined
+    let email:string | undefined
+
+    try {
+
+        const data = eventData || {}
+
+        jobId= data.jobId
+        email = data.email
+        const channelId = data.channelId
+        const channelName = data.channelName
+        const videos = data.videos
+
+
+        logger.info('Resolving youtube channel niche --> ', {
+            jobId,
+            channelId,
+            VideosCount:videos.length
+        })
+
+        const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+        if(!OPENAI_API_KEY){
+            throw new Error("Openai api key not configured")
+        }
+
+        const jobData = await state.get(`job:${jobId}`)
+
+        //now setting the everything for the job : jobId the data is {---}
+        await state.set(`job:${jobId}`, {
+            ...jobData,
+            status:'fetching niche of channel.'
+        })
+
+
+
+     //prompt for analyzing the niche.
+        const userPrompt = `
+            You are an expert in YouTube content analysis.
+
+            You will receive a list of recent video titles and descriptions from a single YouTube channel.
+
+            Your task:
+            - Identify the 1–2 most relevant overall *niches* that represent the entire channel's content.
+            - Do NOT describe each video individually.
+            - Focus on the main consistent theme across the videos.
+
+            Respond ONLY in this JSON format:
+            {
+            "niches": ["<niche1>", "<optional_niche2>"],
+            "reason": "<short summary of 10 words max>"
+            }
+
+            Here are the videos:
+            ${videos
+            .map(
+                (v:any) => `• Title: ${v.title}
+            Description: ${v.description}`
+            )
+            .join("\n\n")}
+            `;
+
+
+
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions',
+            {
+                method:'POST',
+                headers:{
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${OPENAI_API_KEY}`
+
+                },
+                
+                body: JSON.stringify({
+                    "model": "openai/gpt-4o-mini",
+                    messages: [
+                        {
+                            role:'system',
+                            content: "You are a YouTube channel analysis assistant.",
+                        },
+
+                        {
+                            role:'user',
+                            content:userPrompt
+
+                        }
+                    ],
+                    temperature:0.7,
+                    response_format:{type: 'json_object'}
+                })
+            }
+        )
+
+    // if there is error in finding the niche...
+        if(!response.ok){
+            const errorData = await response.json()
+            throw new Error(`Openai API error : ${errorData.error?.message} || 'unknown ai error `)
+        }
+
+    //after successfullly finding the niche...
+        const result = await response.json()
+        const aiMessage = result.choices?.[0]?.message?.content || "{}";
+        const parsed = JSON.parse(aiMessage);
+
+
+    await state.set(`job:${jobId}`, {
+    //   jobId,
+    //   channelName,
+    //   email,
+    ...jobData,
+      status: "niche detected",
+      niches: parsed.niches,
+      reason: parsed.reason,
+    });
+
+    await emit({
+      topic: "yt.niche.fetched",
+    //   data: {
+    //     jobId,
+    //     email,
+    //     channelName,
+    //     niches: parsed.niches,
+    //     reason: parsed.reason,
+    //   },
+
+    
+        jobId,
+        email,
+        channelName,
+        niches: parsed.niches,
+        reason: parsed.reason,
+      
+    });
+
+
+
+
+
+
+
+     
+
+
+
+
+    } catch (error:any) {
+        logger.error('Error in fetching Niche of the channel ', { error:error.message})
+
+        if(!jobId  ||  !email){
+            logger.error("Cannot send error notification - missing jobId or email")
+            return
+        }
+
+        const jobData = await state.get(`job:${jobId}`)
+
+        await state.set(`job:${jobId}`,{
+            ...jobData,
+            status:'failed',
+            error:error.message
+        })
+
+        await emit({
+            topic:"yt.niche.error",
+            data:{
+                jobId,
+                email,
+                error:'failed to fetch channel niche.Please try again'
+            }
+        })
+        
+    }
+
 }
