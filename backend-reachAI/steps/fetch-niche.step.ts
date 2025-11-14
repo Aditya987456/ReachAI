@@ -133,22 +133,20 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
     await emit({
       topic: "yt.niche.fetched",
-    //   data: {
-    //     jobId,
-    //     email,
-    //     channelName,
-    //     niches: parsed.niches,
-    //     reason: parsed.reason,
-    //   },
-
-    
+      data: {
         jobId,
         email,
         channelName,
         niches: parsed.niches,
         reason: parsed.reason,
+      },
       
     });
+
+
+// state = backend storage → “keep everything safe for later.”
+
+// emit = visible output → “show/send only the important part now.”
 
 
 

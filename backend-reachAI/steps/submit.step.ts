@@ -99,7 +99,9 @@ Use state → for shared data between steps or events
 export const handler = async (req:any , { emit, logger, state }:any)=>{
     try {
 
-        //firstly we printing what we are receiving.
+      
+
+      //--firstly we printing what we are receiving.
         logger.info('Received submition request', { body: req.body})
 
 
@@ -128,15 +130,22 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
           }
         }
 
+
+        //---detecting the region of the user.
+        const region = "IN"  //currently its india but will update this.
+
+
+
         //creating jobId
         const jobId = uuidv4();
 
         //set the information in this job.-- abhi jo request ua uska ek jobId ban gaya.
-        await state.set(`Job : ${jobId}`, {
+        await state.set(`job:${jobId}`, {
           //data of the job
           jobId,
           channel,
           email,
+          region,
           status:"queued",
           CreatedAt: new Date().toISOString()
         })
