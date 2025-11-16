@@ -9,7 +9,9 @@ export const config= {
     name:"fetch-trending-videos",
     type:'event',
     subscribes:["yt.niche.fetched"],
-    emits:["yt.trendingVideos.fetched", "yt.trendingVideos.error"]
+    emits:["yt.trendingVideos.fetched", "yt.trendingVideos.error"],
+    // flows:['yt-videos-flows-analysis']
+    flows: ['optimized-youtube-reach']
 }
 
 
@@ -39,7 +41,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         jobId= data.jobId
         email = data.email
         const channelId = data.channelId
-        // const channelName = data.channelName
+        const channelName = data.channelName
         const niche = data.niches[0]    //first niche we are taking here.
         
 
@@ -54,11 +56,17 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             throw new Error("youtube api key not configured")
         }
 
-        const jobData = await state.get(`job:${jobId}`)
-        const region = jobData.region
+        const jobData = await state.get('jobs', jobId)
+        const region = jobData?.region || "IN";
+
+    //------using from the state
+        const UserVideos = jobData.videos
+        if (!UserVideos) {
+            throw new Error("No user videos found in state or event payload");
+            }
 
     //now setting the everything for the job : jobId the data is {---}
-        await state.set(`job:${jobId}`, {
+        await state.set('jobs', jobId, {
             ...jobData,
             status:'fetching trending videos of the niche.'
         })
@@ -81,7 +89,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             })
 
             //updating that videos not able to gets fetched
-            await state.set(`job:${jobId}`,{
+            await state.set('jobs', jobId,{
                 ...jobData,
                 status:'failed',
                 error:'No Trending videos found'
@@ -99,7 +107,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
         }else{
             //--means response is there like trending videos gets fetched.
-            const TrendigVideos:Video[] = YtTrendingVideos.items.map( (items:any)=>({
+            const TrendingVideos:Video[] = YtTrendingVideos.items.map( (items:any)=>({
 
                 videoId:items.id.videoId,
                 title:items.snippet.title,
@@ -110,21 +118,27 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
             logger.info(' Trending videos fetched successfully', {
                 jobId,
-                videoCount:TrendigVideos.length
+                videoCount:TrendingVideos.length
             })
 
             //updating the status of the job
-            await state.set(`job:${jobId}`,{
+            await state.set('jobs', jobId,{
                 ...jobData,
                 status:'Trending video fetched',
-                TrendigVideos      //setting trending videos for next event to use in prompt
+                TrendingVideos  ,    //setting trending videos for next event to use in prompt
+                region              //for checking.
             })
 
             await emit({
                 topic:"yt.trendingVideos.fetched",
                   data: {
                     jobId,
-                    TrendigVideos
+                    region,
+                    channelId,
+                    email,
+                    channelName,
+                    TrendingVideos,
+                   
                 } 
             })
 
@@ -148,9 +162,9 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             return
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        const jobData = await state.get('jobs', jobId)
 
-        await state.set(`job:${jobId}`,{
+        await state.set('jobs', jobId,{
             ...jobData,
             status:'failed',
             error:error.message

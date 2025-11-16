@@ -12,6 +12,7 @@ export const config:ApiRouteConfig = {
     path:"/submit",
     method:"POST",
     emits: ["yt.submit"],
+    flows: ['optimized-youtube-reach']
 }
 
 
@@ -140,7 +141,7 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
         const jobId = uuidv4();
 
         //set the information in this job.-- abhi jo request ua uska ek jobId ban gaya.
-        await state.set(`job:${jobId}`, {
+        await state.set(`jobs`, jobId , {
           //data of the job
           jobId,
           channel,
@@ -149,6 +150,11 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
           status:"queued",
           CreatedAt: new Date().toISOString()
         })
+
+
+
+
+
 
         logger.info('-------------Job created ------------ ', {jobId, email, channel})
 

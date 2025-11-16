@@ -9,7 +9,9 @@ export const config= {
     name:"fetch-niche",
     type:'event',
     subscribes:["yt.videos.fetched"],
-    emits:["yt.niche.fetched", "yt.niche.error"]
+    emits:["yt.niche.fetched", "yt.niche.error"],
+    // flows:['yt-videos-flows-analysis']
+    flows: ['optimized-youtube-reach']
 }
 
 
@@ -42,10 +44,18 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             throw new Error("Openai api key not configured")
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        const jobData = await state.get('jobs', jobId)
+        
+
+
+//------using from the state
+const UserVideos = jobData.videos
+if (!UserVideos) {
+throw new Error("No user videos found in state or event payload");
+}
 
         //now setting the everything for the job : jobId the data is {---}
-        await state.set(`job:${jobId}`, {
+        await state.set('jobs', jobId, {
             ...jobData,
             status:'fetching niche of channel.'
         })
@@ -121,7 +131,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         const parsed = JSON.parse(aiMessage);
 
 
-    await state.set(`job:${jobId}`, {
+    await state.set('jobs', jobId, {
     //   jobId,
     //   channelName,
     //   email,
@@ -167,9 +177,9 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             return
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        const jobData = await state.get('jobs', jobId)
 
-        await state.set(`job:${jobId}`,{
+        await state.set('jobs', jobId,{
             ...jobData,
             status:'failed',
             error:error.message

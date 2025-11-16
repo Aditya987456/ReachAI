@@ -2,15 +2,17 @@
 
 import { EventConfig, Logger } from "motia";
 
-//step-3: fetch the latest 5 videos from channel id.
+//step-3: fetch the latest 10 videos from channel id.
 
 
 
 export const config= {
-    name:"FetchLatest-5-videos",
+    name:"FetchLatest-10-videos",
     type:'event',
     subscribes:["yt.channel.resolved"],
-    emits:["yt.videos.fetched", "yt.videos.error"]
+    emits:["yt.videos.fetched", "yt.videos.error"],
+    // flows:['yt-videos-flows-analysis']
+    flows: ['optimized-youtube-reach']
 }
 
 interface Video{
@@ -50,10 +52,11 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             throw new Error("Youtube api key not configured")
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        const jobData = await state.get('jobs', jobId)
+
 
         //now setting the everything for the job : jobId the data is {---}
-        await state.set(`job:${jobId}`, {
+        await state.set('jobs', jobId, {
             ...jobData,
             status:'fetching videos.'
         })
@@ -72,7 +75,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             })
 
             //updating that videos not able to gets fetched
-            await state.set(`job:${jobId}`,{
+            await state.set('jobs', jobId,{
                 ...jobData,
                 status:'failed',
                 error:'No videos found'
@@ -89,7 +92,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             return;
 
         }else{
-            //means response is there from the lastest 5 videos of the channel.
+            //means response is there from the lastest 10 videos of the channel.
             const videos:Video[] = ytResponseData.items.map( (items:any)=>({
                 videoId:items.id.videoId,
                 description: items.snippet.description ,
@@ -99,17 +102,36 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
                 thumbnail:items.snippet.thumbnails.default.url
             }));
 
+            
+
             logger.info('videos fetched successfully', {
                 jobId,
                 videoCount:videos.length
             })
 
             //updating the status of the job
-            await state.set(`job:${jobId}`,{
+            await state.set('jobs', jobId,{
                 ...jobData,
                 status:'video fetched',
-                videos
+                videos:videos
             })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             await emit({
                 topic:"yt.videos.fetched",
@@ -135,9 +157,9 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             return
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        const jobData = await state.get('jobs', jobId)
 
-        await state.set(`job:${jobId}`,{
+        await state.set('jobs', jobId,{
             ...jobData,
             status:'failed',
             error:error.message

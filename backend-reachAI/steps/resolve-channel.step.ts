@@ -14,7 +14,9 @@ export const config= {
     name:"ResolveChannel",
     type:'event',
     subscribes:["yt.submit"],
-    emits:["yt.channel.resolved", "yt.channel.error"]
+    emits:["yt.channel.resolved", "yt.channel.error"],
+    // flows: ["youtube-channel-resolving"]
+    flows: ['optimized-youtube-reach']
 }
 
 
@@ -41,13 +43,19 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             throw new Error("Youtube api key not configured")
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        
+        const jobData = await state.get('jobs', jobId)
+        logger.info('------------from prev even data from state --------:', jobData.region)
+
 
         //now setting the everything for the job : jobId the data is {---}
-        await state.set(`job:${jobId}`, {
+        await state.set('jobs',jobId, {
             ...jobData,
             status:'resolving channel'
         })
+
+
+
 
         let channelId:string | null = null
         let channelName:string =""
@@ -87,7 +95,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         if(!channelId){
             logger.error('Channel not found', {channel})
 
-            await state.set(`job:${jobId}`,{
+            await state.set('jobs', jobId,{
                 ...jobData,
                 status:'failed',
                 error:'channel not found'
@@ -127,10 +135,10 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             return
         }
 
-        const jobData = await state.get(`job:${jobId}`)
+        const jobData = await state.get('jobs', jobId,)
 
         //set the status of the job to failed.
-        await state.set(`job:${jobId}`,{
+        await state.set('jobs', jobId,{
             ...jobData,
             status:'failed',
             error:error.message
