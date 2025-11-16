@@ -75,7 +75,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
 
         const searchURL =`https://www.googleapis.com/youtube/v3/search?part=snippet&q=
-                        ${encodeURIComponent(niche)}&type=video&maxResults=10&order=viewCount&regionCode=${region}&key=${YOUTUBE_API_KEY}`;
+                        ${encodeURIComponent(niche)}&type=video&maxResults=8&order=viewCount&regionCode=${region}&key=${YOUTUBE_API_KEY}`;
 
 
         const Response = await fetch(searchURL)

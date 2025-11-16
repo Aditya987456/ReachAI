@@ -58,8 +58,11 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         const niche2 = jobData.niches[1]
         const reasonNiche = jobData.reason
 
-        const userVideosList = UserVideos.map((v:any, idx:number) => `${idx+1}. "${v.title}"`)
+        const userVideosList = UserVideos
+        .slice(0, 5) //  take only the first 5 videos
+        .map((v:any, idx:number) => `${idx+1}. "${v.title}"`)
         .join("\n");
+
         
 
 
@@ -211,6 +214,7 @@ Return the output in JSON formate:
         jobId,
         email,
         channelName,
+        channelId,
         ImprovedTitles,
       },
       

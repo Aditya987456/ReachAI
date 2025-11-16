@@ -42,13 +42,21 @@
   {
     "id": "optimized-youtube-reach",
     "config": {
-      "steps/resolve-channel.step.ts": {
-        "x": 267,
-        "y": -76
+      "steps/trending-videos.step.ts": {
+        "x": 917,
+        "y": 55
       },
       "steps/submit.step.ts": {
         "x": -17,
         "y": -190
+      },
+      "steps/send-email.step.ts": {
+        "x": 1365,
+        "y": 0
+      },
+      "steps/resolve-channel.step.ts": {
+        "x": 267,
+        "y": -76
       },
       "steps/fetch-videos.step.ts": {
         "x": 555,
@@ -58,9 +66,9 @@
         "x": 921,
         "y": -163
       },
-      "steps/trending-videos.step.ts": {
-        "x": 917,
-        "y": 55
+      "steps/error-handling.step.ts": {
+        "x": 1623,
+        "y": 105
       },
       "steps/AI-generatedTitles.step.ts": {
         "x": 489,

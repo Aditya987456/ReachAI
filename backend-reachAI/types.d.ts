@@ -12,11 +12,13 @@ declare module 'motia' {
   }
 
   interface Handlers {
-    'fetch-trending-videos': EventHandler<never, { topic: 'yt.trendingVideos.fetched'; data: never }>
+    'fetch-trending-videos': EventHandler<never, { topic: 'yt.trendingVideos.fetched'; data: never } | { topic: 'yt.trendingVideos.error'; data: never }>
     'SubmitChannel': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'yt.submit'; data: never }>
-    'ResolveChannel': EventHandler<never, { topic: 'yt.channel.resolved'; data: never }>
-    'FetchLatest-10-videos': EventHandler<never, { topic: 'yt.videos.fetched'; data: never }>
-    'fetch-niche': EventHandler<never, { topic: 'yt.niche.fetched'; data: never }>
-    'fetch-optimized-titles': EventHandler<never, never>
+    'send-email-with-titles': EventHandler<never, { topic: 'yt.titles.Email-Send.error'; data: never }>
+    'ResolveChannel': EventHandler<never, { topic: 'yt.channel.resolved'; data: never } | { topic: 'yt.channel.error'; data: never }>
+    'FetchLatest-10-videos': EventHandler<never, { topic: 'yt.videos.fetched'; data: never } | { topic: 'yt.videos.error'; data: never }>
+    'fetch-niche': EventHandler<never, { topic: 'yt.niche.fetched'; data: never } | { topic: 'yt.niche.error'; data: never }>
+    'Error-handling': EventHandler<never, never>
+    'fetch-optimized-titles': EventHandler<never, { topic: 'yt.AI-Title.fetched'; data: never } | { topic: 'yt.AI-Title.error'; data: never }>
   }
 }
