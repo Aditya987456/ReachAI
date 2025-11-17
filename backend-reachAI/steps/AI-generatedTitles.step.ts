@@ -117,7 +117,7 @@ For EACH user video title:
    - The detected niche  
    - The trending videos style  
 3. Titles must be short, punchy, clickable, emotional & keyword-rich  
-4. After the titles → briefly explain **WHY these titles will perform better**  
+4. After the titles → briefly explain **WHY these titles will perform better in 1-2 sentences only**  
 
 Return the output in JSON formate:
     {
