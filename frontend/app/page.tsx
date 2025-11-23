@@ -1,18 +1,39 @@
-import Navbar from "@/components/Navbar"
-import Hero from "@/components/Hero"
-import YtCard from "@/components/YtCard"
-import Content from "@/components/Content"
-import Footer from "@/components/footer"
+
+import Hero from "@/components/Hero";
+import BeforeAfter from "@/components/before-after";
+import HowWorks from "@/components/HowWorks";
+import Footer from "@/components/footer";
+import Benefits from "@/components/benefits";
+import SampleOutput from "@/components/sample";
+import Pricing from "@/components/pricing";
+import FAQ from "@/components/faq";
+import LandingSections from "@/components/landing";
+import SectionsPage from "@/components/landing";
+import PromoCard from "@/components/promoCard";
 
 export default function Home() {
-  
-  return(
-    <main>
+  return (
+    <>
+    <Hero />
+    <BeforeAfter/>
 
-      <div>-----------------------  hello home page ------------------------</div>
-      <Navbar></Navbar>
-      
-    </main>
+
+    <HowWorks/>
+    <Benefits/>
+    {/* <SampleOutput/> */}
+    <FAQ/>
+
     
+    {/* <SectionsPage></SectionsPage> */}
+
+
+
+
+
+    <Footer/>
+    
+    </>
+  
   )
 }
+
