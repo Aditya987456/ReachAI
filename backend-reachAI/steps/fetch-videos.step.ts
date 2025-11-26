@@ -41,7 +41,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         const channelId = data.channelId
         const channelName = data.channelName
 
-
+        //working good here also channelId
         logger.info('Resolving youtube channel', {
             jobId,
             channelId
@@ -139,7 +139,8 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
                     jobId,
                     channelName,
                     videos,
-                    email
+                    email,
+                    channelId
 
                 }
             })

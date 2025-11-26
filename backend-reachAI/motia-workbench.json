@@ -63,8 +63,8 @@
         "y": -202
       },
       "steps/fetch-niche.step.ts": {
-        "x": 921,
-        "y": -163
+        "x": 958,
+        "y": -278
       },
       "steps/error-handling.step.ts": {
         "x": 1623,
@@ -73,6 +73,23 @@
       "steps/AI-generatedTitles.step.ts": {
         "x": 489,
         "y": 221
+      }
+    }
+  },
+  {
+    "id": "Paid User workflow",
+    "config": {
+      "steps/paidUser/fetchVideosPaid.step.ts": {
+        "x": 446,
+        "y": 26
+      },
+      "steps/paidUser/CreateOrder.step.ts": {
+        "x": -187,
+        "y": -26
+      },
+      "steps/paidUser/checkPayment.step.ts": {
+        "x": 0,
+        "y": 0
       }
     }
   }

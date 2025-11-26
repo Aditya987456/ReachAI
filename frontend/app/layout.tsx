@@ -62,10 +62,9 @@
 //   );
 // }
 
-
-
 import Navbar from "@/components/Navbar";
 import "./globals.css";
+import Script from "next/script";  // <-- import Script
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -73,8 +72,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans bg-white text-black">
         <Navbar />
         {children}
+
+        {/* Razorpay checkout script loading popup wala*/}
+        <Script 
+          src="https://checkout.razorpay.com/v1/checkout.js" 
+          strategy="beforeInteractive"  
+        />
       </body>
     </html>
   );
 }
+
 

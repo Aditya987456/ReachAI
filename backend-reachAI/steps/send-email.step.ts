@@ -384,12 +384,14 @@ export const handler = async (
     jobId = data.jobId;
     email = data.email;
     const channelName: string = data.channelName;
+    const channelId:string = data.channelId
     const ImprovedTitles: ImprovedTitle[] = data.ImprovedTitles || [];
 
     logger.info("send-email-with-titles triggered", { jobId, email });
 
     if (!jobId) throw new Error("Missing jobId");
     if (!email) throw new Error("Missing email");
+    if (!channelId) throw new Error("Missing channelId");
     if (!channelName) throw new Error("Missing channelName");
     if (!Array.isArray(ImprovedTitles) || ImprovedTitles.length === 0)
       throw new Error("ImprovedTitles empty");
@@ -401,6 +403,8 @@ export const handler = async (
     if (!RESEND_FROM_EMAIL) throw new Error("Missing RESEND_FROM_EMAIL");
 
     const jobData = await state.get("jobs", jobId);
+
+    //const channelId = jobData.
 
     if (jobData?.emailId && jobData?.status === "completed") {
       logger.info("Email already sent — skipping.");
@@ -417,8 +421,8 @@ export const handler = async (
       updatedAt: new Date().toISOString(),
     });
 
-    const htmlBody = GenerateEmailHTML(channelName, ImprovedTitles);
-    const textBody = GenerateEmailTEXT(channelName, ImprovedTitles);
+    const htmlBody = GenerateEmailHTML(channelName, ImprovedTitles, channelId, email);
+    const textBody = GenerateEmailTEXT(channelName, ImprovedTitles, channelId, email);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -451,7 +455,9 @@ export const handler = async (
       topic: "yt.titles.Email-Send",
       data: { jobId, email, emailId },
     });
-  } catch (err: any) {
+  
+  }
+   catch (err: any) {
     logger.error("Email send failed", { error: err.message });
 
     if (jobId) {
@@ -472,7 +478,7 @@ export const handler = async (
 
 /* ---------------- Text fallback ---------------- */
 
-export function GenerateEmailTEXT(channelName: string, titles: ImprovedTitle[]) {
+export function GenerateEmailTEXT(channelName: string, titles: ImprovedTitle[], channelId:string, email:string) {
   let text = `Your Optimized YouTube Titles for ${channelName}\n\n`;
   titles.forEach((t, i) => {
     text += `Video ${i + 1}\n`;
@@ -484,16 +490,17 @@ export function GenerateEmailTEXT(channelName: string, titles: ImprovedTitle[]) 
     text += `\n--------------------------\n\n`;
   });
 
-  text += `Upgrade for ₹89: Full SEO descriptions, tags, and keyword strategy.\n`;
-  text += `https://reachai.app/upgrade\n\n`;
+  text += `Upgrade for ₹99: Full SEO descriptions, tags, and keyword strategy.\n`;
+  text += `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
   text += `ReachAI — Smarter YouTube Growth\n`;
   return text;
 }
 
 /* ---------------- HTML Email (Version A, YouTube Red) ---------------- */
 
-export function GenerateEmailHTML(channelName: string, titles: ImprovedTitle[]) {
+export function GenerateEmailHTML(channelName: string, titles: ImprovedTitle[],channelId:string, email:string) {
   const ytRed = "#FF0000";
+const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
 
 return `
 <!DOCTYPE html>
@@ -609,12 +616,12 @@ return `
 
       <!-- Price -->
       <div style="font-size:14px; color:#333; text-align:center; margin-bottom:20px;">
-        All this for just <strong>₹89</strong>.
+        All this for just <strong>₹99</strong>.
       </div>
 
       <!-- CTA Button -->
       <div style="text-align:center;">
-        <a href="https://reachai.app/upgrade"
+        <a href="${urlCTA}"
           style="
             display:inline-block;
             background-color:#ff0000;
@@ -625,6 +632,7 @@ return `
             font-size:16px;
             font-weight:bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor:pointer;
           ">
           🔥 Upgrade & Boost SEO
         </a>
@@ -639,7 +647,7 @@ return `
             <!--  <td style="font-size:13px; color:#777; padding-top:20px;">-->
             <!--    Keep creating,<br>-->
             <!--    <strong>ReachAI — Smarter YouTube Growth</strong><br>-->
-            <!--    https://reachai.app-->
+            <!--    https://reachaiapp.vercel.app-->
             <!--  </td>-->
             <!--</tr>-->
             
@@ -648,7 +656,7 @@ return `
   <td style="font-size:13px; color:#777; padding-top:24px; text-align:center; line-height:1.6;">
     Keep creating,<br>
     <strong style="color:#333;">ReachAI — Smarter YouTube Growth</strong><br>
-    <a href="https://reachai.app" style="color:#ff0000; text-decoration:none;">https://reachai.app</a>
+    <a href="https://crateral-beastlier-kurtis.ngrok-free.dev/" style="color:#ff0000; text-decoration:none;">reachaiapp</a>
   </td>
 </tr>
 

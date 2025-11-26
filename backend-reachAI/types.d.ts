@@ -20,5 +20,8 @@ declare module 'motia' {
     'fetch-niche': EventHandler<never, { topic: 'yt.niche.fetched'; data: never } | { topic: 'yt.niche.error'; data: never }>
     'Error-handling': EventHandler<never, never>
     'fetch-optimized-titles': EventHandler<never, { topic: 'yt.AI-Title.fetched'; data: never } | { topic: 'yt.AI-Title.error'; data: never }>
+    'FetchVideos': EventHandler<never, never>
+    'PaidUser-CreateOrder': ApiRouteHandler<Record<string, unknown>, unknown, never>
+    'PaidUser-VerifyPayment': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'paidUser.payment.success'; data: never }>
   }
 }

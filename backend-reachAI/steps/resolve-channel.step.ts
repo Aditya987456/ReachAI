@@ -34,7 +34,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         email = data.email
         const channel = data.channel
 
-        logger.info('Resolving youtube channel', {
+        logger.info('Resolving youtube channel----', {
             jobId, channel
         })
 
@@ -56,7 +56,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
 
 
-
+//######## here we extracting the channel id by using channel handle of the user.
         let channelId:string | null = null
         let channelName:string =""
 
@@ -112,6 +112,11 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         return
         }
 
+
+        //after resolving channel id --> working good
+        // logger.info('after resolvinf channel. channel Id is ----', {
+        //     channelId
+        // })
 
         //emit data--> successfully resolved.
         await emit({

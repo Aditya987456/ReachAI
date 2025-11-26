@@ -147,6 +147,7 @@ throw new Error("No user videos found in state or event payload");
         jobId,
         email,
         channelName,
+        channelId,
         niches: parsed.niches,
         reason: parsed.reason,
       },
