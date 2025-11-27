@@ -64,12 +64,14 @@
 
 import Navbar from "@/components/Navbar";
 import "./globals.css";
-import Script from "next/script";  // <-- import Script
+import Script from "next/script";  // import Script may for razorpay
+import { Toaster, toast } from 'sonner'   //notification
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html className="scroll-smooth" lang="en">
       <body className="font-sans bg-white text-black">
+        <Toaster richColors position="top-center" />
         <Navbar />
         {children}
 

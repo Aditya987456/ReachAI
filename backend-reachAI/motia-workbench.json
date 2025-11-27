@@ -83,13 +83,29 @@
         "x": 446,
         "y": 26
       },
+      "steps/paidUser/fetchNichePaid.step.ts": {
+        "x": 310,
+        "y": 84
+      },
+      "steps/paidUser/checkPayment.step.ts": {
+        "x": 22,
+        "y": 152
+      },
+      "steps/paidUser/TrendingVidPaidUser.step.ts": {
+        "x": 310,
+        "y": 168
+      },
+      "steps/paidUser/SendEmail-PaidUser.step.ts": {
+        "x": 310,
+        "y": 252
+      },
       "steps/paidUser/CreateOrder.step.ts": {
         "x": -187,
         "y": -26
       },
-      "steps/paidUser/checkPayment.step.ts": {
-        "x": 0,
-        "y": 0
+      "steps/paidUser/AI-generatedMetadata.step.ts": {
+        "x": 310,
+        "y": 336
       }
     }
   }

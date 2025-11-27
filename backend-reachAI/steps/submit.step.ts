@@ -97,6 +97,10 @@ Use state → for shared data between steps or events
 */
 
 
+
+const SPAM_WINDOW = 3 * 60 * 1000; // 3 minutes
+
+
 export const handler = async (req:any , { emit, logger, state }:any)=>{
     try {
 
@@ -132,13 +136,54 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
         }
 
 
+  //--------------------checking duplication of job.-----------------------------------
+  //using gpt help...
+
+        // Step 1: Create a unique key for this email
+        const lastSubKey = `lastSub:${email}`;
+        
+        // Step 2: Check when they last submitted
+        const lastSub = await state.get('spam', lastSubKey);
+
+        // Step 3: If they submitted before, check if enough time passed
+        if (lastSub) {
+            // Calculate how much time has passed (in milliseconds)
+            const timePassed = Date.now() - lastSub.time;
+
+            // Check if they're submitting too fast
+            if (timePassed < SPAM_WINDOW) {
+                // Calculate how many seconds they need to wait
+                const waitSeconds = Math.ceil((SPAM_WINDOW - timePassed) / 1000);
+
+                logger.warn('Spam blocked', { email, waitSeconds })
+
+                return {
+                    status: 429, // Too Many Requests
+                    body: {
+                        error: "Please wait before submitting again",
+                        waitSeconds: waitSeconds
+                    }
+                }
+            }
+        }
+
+        // Step 4: Record this submission time (for next check)
+        await state.set('spam', lastSubKey, { time: Date.now() })
+
+
+
+
+
+
+
         //---detecting the region of the user.
         const region = "IN"  //currently its india but will update this.
 
 
-
         //creating jobId
         const jobId = uuidv4();
+
+
 
         //set the information in this job.-- abhi jo request ua uska ek jobId ban gaya.
         await state.set(`jobs`, jobId , {
