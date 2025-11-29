@@ -43,8 +43,8 @@
     "id": "optimized-youtube-reach",
     "config": {
       "steps/trending-videos.step.ts": {
-        "x": 917,
-        "y": 55
+        "x": 826,
+        "y": 33
       },
       "steps/submit.step.ts": {
         "x": -17,
@@ -80,32 +80,32 @@
     "id": "Paid User workflow",
     "config": {
       "steps/paidUser/fetchVideosPaid.step.ts": {
-        "x": 446,
-        "y": 26
+        "x": -111,
+        "y": 141
       },
       "steps/paidUser/fetchNichePaid.step.ts": {
-        "x": 310,
-        "y": 84
+        "x": 186,
+        "y": 293
       },
       "steps/paidUser/checkPayment.step.ts": {
-        "x": 22,
-        "y": 152
+        "x": -476,
+        "y": 194
       },
       "steps/paidUser/TrendingVidPaidUser.step.ts": {
-        "x": 310,
-        "y": 168
+        "x": 358,
+        "y": 141
       },
       "steps/paidUser/SendEmail-PaidUser.step.ts": {
-        "x": 310,
-        "y": 252
+        "x": 863,
+        "y": 139
       },
       "steps/paidUser/CreateOrder.step.ts": {
-        "x": -187,
-        "y": -26
+        "x": -439,
+        "y": -27
       },
       "steps/paidUser/AI-generatedMetadata.step.ts": {
-        "x": 310,
-        "y": 336
+        "x": 608,
+        "y": 361
       }
     }
   }

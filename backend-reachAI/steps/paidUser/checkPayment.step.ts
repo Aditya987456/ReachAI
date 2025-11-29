@@ -96,7 +96,9 @@ export const handler = async (req:any , {emit, logger, state }:any)=>{
     //emit for next event aftewr successs payment.
     await emit({
       topic: "paidUser.payment.success",
-      data: { PaidJobId }
+      data: { 
+        PaidJobId
+       }
     });
 
     return {

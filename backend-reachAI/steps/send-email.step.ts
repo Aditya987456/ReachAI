@@ -502,6 +502,8 @@ export function GenerateEmailHTML(channelName: string, titles: ImprovedTitle[],c
   const ytRed = "#FF0000";
 const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
 
+
+
 return `
 <!DOCTYPE html>
 <html>
@@ -668,6 +670,281 @@ return `
   </body>
 </html>
   `;
+
+
+
+
+
+
+
+// return `<!DOCTYPE html>
+// <html>
+//   <head>
+//     <meta charset="utf-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>ReachAI Email Preview</title>
+//   </head>
+//   <body style="margin:0; padding:0; background:#fafafa; font-family: Inter, Arial, sans-serif;">
+
+//     <table width="100%" cellpadding="0" cellspacing="0">
+//       <tr>
+//         <td align="center">
+
+//           <!-- MAIN CONTAINER -->
+//           <table width="100%" cellpadding="0" cellspacing="0" style="max-width:650px; background:white; padding:28px; margin-top:20px; border-radius:14px; box-shadow:0 5px 20px rgba(0,0,0,0.08);">
+
+//             <!-- HEADER -->
+//             <tr>
+//               <td style="padding-bottom:20px; text-align:center;">
+//                 <!-- Accented Header Title (RED) -->
+//                 <div style="font-size:24px; color:#111; font-weight:700; padding-bottom:8px; display:inline-block; border-bottom:3px solid #FF2D2D; line-height:1.2;">
+//                   🚀 Your SEO-Optimized Titles Are Ready!
+//                 </div>
+//               </td>
+//             </tr>
+
+//             <tr>
+//               <td style="font-size:16px; color:#333; line-height:1.6; padding-bottom:25px; text-align:center;">
+//                 Hey Creator, <br>
+//                 Your AI-powered, trend-driven, SEO-optimized titles for  
+//                 <strong style="color:#000;">TechExplorer Daily</strong> are here!
+//               </td>
+//             </tr>
+
+//             <!-- WHY SECTION -->
+//             <tr>
+//               <td style="font-size:15px; padding:16px; background:#fff8f8; border-radius:10px; color:#444; line-height:1.5; border:1px solid #ffebeb;">
+//                 These titles are optimized using:
+//                 <ul style="margin:10px 0 0 20px; padding:0;">
+//                   <li>Your latest uploads</li>
+//                   <li>Trending videos in your niche</li>
+//                   <li>CTR & SEO title psychology</li>
+//                 </ul>
+//               </td>
+//             </tr>
+
+//             <!-- TITLES SECTION -->
+//             <tr>
+//               <td style="font-size:22px; font-weight:700; color:#000; padding:30px 0 15px;">
+//                 ✨ Optimized Titles
+//               </td>
+//             </tr>
+
+//             <!-- MOCK ITEM 1 - STACKABLE CARD -->
+//             <tr>
+//               <td style="padding-bottom:25px;">
+//                 <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:12px; border:1px solid #e0e0e0; background:white; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+//                   <tr>
+//                     <td style="padding:20px;">
+                      
+//                       <!--[if mso | IE]>
+//                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="600">
+//                       <tr>
+//                       <td align="left" valign="top" width="180">
+//                       <![endif]-->
+
+//                       <!-- LEFT COLUMN: THUMBNAIL WRAPPER -->
+//                       <div style="display:inline-block; width:100%; max-width:180px; vertical-align:top;">
+//                         <table width="100%" cellpadding="0" cellspacing="0" style="width:100%;">
+//                           <tr>
+//                             <td style="padding-bottom:10px;">
+//                               <a href="#" style="display:block; text-decoration:none;">
+//                                 <img src="https://placehold.co/180x101/ffcccc/b00000?text=Video+%E2%96%B6" 
+//                                      alt="Watch Video" 
+//                                      width="180" height="101"
+//                                      style="width:100%; max-width:180px; height:auto; border-radius:8px; display:block; border:0;">
+//                               </a>
+//                             </td>
+//                           </tr>
+//                         </table>
+//                       </div>
+
+//                       <!--[if mso | IE]>
+//                       </td>
+//                       <td align="left" valign="top" width="420" style="padding-left: 20px;">
+//                       <![endif]-->
+
+//                       <!-- RIGHT COLUMN: TEXT CONTENT WRAPPER -->
+//                       <div style="display:inline-block; width:100%; max-width:420px; vertical-align:top; padding-left:15px;">
+//                         <table width="100%" cellpadding="0" cellspacing="0">
+//                           <tr>
+//                             <td>
+//                               <div style="font-size:16px; font-weight:600; color:#111; margin-bottom:6px; margin-top: -5px;">
+//                                 Video 1 • 
+//                                 <a href="#" 
+//                                    style="color:#E53935; text-decoration:none; font-weight:600;">
+//                                   View →  
+//                                 </a>
+//                               </div>
+
+//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
+//                                 <strong>Original:</strong> “Reviewing the new Camera”
+//                               </div>
+
+//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
+//                                 <strong>Improved 1:</strong> “Is This Camera Worth The Hype? Honest Review”
+//                               </div>
+
+//                               <div style="font-size:14px; color:#555; margin-bottom:12px;">
+//                                 <strong>Improved 2:</strong> “Stop! Don't Buy a Camera Until You See This”
+//                               </div>
+                              
+//                               <div style="font-size:13px; color:#666; background:#fef0f0; padding:10px; border-radius:8px; border:1px solid #ffe0e0;">
+//                                 <strong>Why it works:</strong> Creates immediate curiosity and addresses potential buyer's remorse, increasing click-through rate.
+//                               </div>
+//                             </td>
+//                           </tr>
+//                         </table>
+//                       </div>
+
+//                       <!--[if mso | IE]>
+//                       </td>
+//                       </tr>
+//                       </table>
+//                       <![endif]-->
+
+//                     </td>
+//                   </tr>
+//                 </table>
+//               </td>
+//             </tr>
+
+//             <!-- MOCK ITEM 2 - STACKABLE CARD -->
+//             <tr>
+//               <td style="padding-bottom:25px;">
+//                 <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:12px; border:1px solid #e0e0e0; background:white; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+//                   <tr>
+//                     <td style="padding:20px;">
+                      
+//                       <!--[if mso | IE]>
+//                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="600">
+//                       <tr>
+//                       <td align="left" valign="top" width="180">
+//                       <![endif]-->
+
+//                       <!-- LEFT COLUMN: THUMBNAIL WRAPPER -->
+//                       <div style="display:inline-block; width:100%; max-width:180px; vertical-align:top;">
+//                         <table width="100%" cellpadding="0" cellspacing="0" style="width:100%;">
+//                           <tr>
+//                             <td style="padding-bottom:10px;">
+//                               <a href="#" style="display:block; text-decoration:none;">
+//                                 <img src="https://placehold.co/180x101/ffcccc/b00000?text=Video+%E2%96%B6" 
+//                                      alt="Watch Video" 
+//                                      width="180" height="101"
+//                                      style="width:100%; max-width:180px; height:auto; border-radius:8px; display:block; border:0;">
+//                               </a>
+//                             </td>
+//                           </tr>
+//                         </table>
+//                       </div>
+
+//                       <!--[if mso | IE]>
+//                       </td>
+//                       <td align="left" valign="top" width="420" style="padding-left: 20px;">
+//                       <![endif]-->
+
+//                       <!-- RIGHT COLUMN: TEXT CONTENT WRAPPER -->
+//                       <div style="display:inline-block; width:100%; max-width:420px; vertical-align:top; padding-left:15px;">
+//                         <table width="100%" cellpadding="0" cellspacing="0">
+//                           <tr>
+//                             <td>
+//                               <div style="font-size:16px; font-weight:600; color:#111; margin-bottom:6px; margin-top: -5px;">
+//                                 Video 2 • 
+//                                 <a href="#" 
+//                                    style="color:#E53935; text-decoration:none; font-weight:600;">
+//                                   View →  
+//                                 </a>
+//                               </div>
+
+//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
+//                                 <strong>Original:</strong> “My Trip to Japan Vlog”
+//                               </div>
+
+//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
+//                                 <strong>Improved 1:</strong> “I Moved to Japan... Here is the Truth”
+//                               </div>
+
+//                               <div style="font-size:14px; color:#555; margin-bottom:12px;">
+//                                 <strong>Improved 2:</strong> “10 Things I Wish I Knew Before Visiting Japan”
+//                               </div>
+                              
+//                               <div style="font-size:13px; color:#666; background:#fef0f0; padding:10px; border-radius:8px; border:1px solid #ffe0e0;">
+//                                 <strong>Why it works:</strong> Focuses on insider knowledge and personal transformation, which performs well in travel niches.
+//                               </div>
+//                             </td>
+//                           </tr>
+//                         </table>
+//                       </div>
+
+//                       <!--[if mso | IE]>
+//                       </td>
+//                       </tr>
+//                       </table>
+//                       <![endif]-->
+
+//                     </td>
+//                   </tr>
+//                 </table>
+//               </td>
+//             </tr>
+
+//             <!-- CTA SECTION -->
+//             <tr>
+//               <td style="padding-top:35px;">
+//                 <div style="background:#fff4f4; border:1px solid #ffcccc; padding:28px; border-radius:14px; box-shadow:0 4px 18px rgba(255,0,0,0.1); text-align:center;">
+
+//                   <div style="font-size:18px; font-weight:bold; color:#B00000; margin-bottom:12px;">
+//                     🚀 Unlock Full Metadata for All 10 Videos
+//                   </div>
+
+//                   <ul style="font-size:14px; color:#444; text-align:left; max-width:300px; margin:0 auto 18px;">
+//                     <li>SEO-rich descriptions</li>
+//                     <li>Tags + Hashtags</li>
+//                     <li>Niche-targeted keyword strategy</li>
+//                     <li>Better ranking + more clicks</li>
+//                   </ul>
+
+//                   <div style="font-size:15px; margin-bottom:18px; color:#333;">
+//                     Everything for just <strong style="color:#D00000;">₹99</strong>.
+//                   </div>
+
+//                   <a href="#"
+//                     style="
+//                       display:inline-block;
+//                       background:#FF2D2D;
+//                       color:#fff;
+//                       padding:16px 32px;
+//                       border-radius:10px;
+//                       text-decoration:none;
+//                       font-size:17px;
+//                       font-weight:700;
+//                       box-shadow:0 6px 16px rgba(255,0,0,0.25);
+//                     ">
+//                     🔥 Upgrade & Boost Your Channel
+//                   </a>
+
+//                 </div>
+//               </td>
+//             </tr>
+
+//             <!-- FOOTER -->
+//             <tr>
+//               <td style="font-size:12px; color:#777; padding-top:32px; text-align:center;">
+//                 Keep creating <br>
+//                 <strong style="color:#333;">ReachAI — Smarter YouTube Growth</strong><br>
+//                 <a href="https://crateral-beastlier-kurtis.ngrok-free.dev/" style="color:#E53935; text-decoration:none;">reachaiapp</a>
+//               </td>
+//             </tr>
+
+//           </table>
+//         </td>
+//       </tr>
+//     </table>
+
+//   </body>
+// </html>s`;
+
+
 }
 
 /* -------- Escape helpers -------- */

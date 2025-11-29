@@ -1,8 +1,8 @@
 
 export const config= {
-    name:"FetchVideos",
+    name:"email final metadata ",
     type:'event',
-    subscribes:["paidUser.payment.success"],
+    subscribes:["paidUser.AImetadata.success"],
     emits:[],
     // flows: ["youtube-channel-resolving"]
      flows: ['Paid User workflow']
