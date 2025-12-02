@@ -129,7 +129,7 @@
 //             status:'failed',
 //             error:error.message
 //         })
-
+ 
 //         //optional may no need to emit this.
 //         await emit({
 //             topic:"yt.titles.Email-Send.error",
@@ -348,11 +348,635 @@
 
 
 
-// --- this is the event
+// // --- this is the event
+// import { EventConfig, Logger } from "motia";
+
+// /**
+//  * Step-8: Send email using Resend with AI optimized titles.
+//  */
+
+// export const config = {
+//   name: "send-email-with-titles",
+//   type: "event",
+//   subscribes: ["yt.AI-Title.fetched"],
+//   emits: ["yt.titles.Email-Send", "yt.titles.Email-Send.error"],
+//   flows: ["optimized-youtube-reach"],
+// };
+
+// type ImprovedTitle = {
+//   original: string;
+//   improved1: string;
+//   improved2: string;
+//   Why?: string;
+//   url?: string;
+// };
+
+// export const handler = async (
+//   eventData: any,
+//   { emit, logger, state }: { emit: any; logger: Logger; state: any }
+// ) => {
+//   let jobId: string | undefined;
+//   let email: string | undefined;
+
+//   try {
+//     const data = eventData || {};
+
+//     jobId = data.jobId;
+//     email = data.email;
+//     const channelName: string = data.channelName;
+//     const channelId:string = data.channelId
+//     const ImprovedTitles: ImprovedTitle[] = data.ImprovedTitles || [];
+
+//     logger.info("send-email-with-titles triggered", { jobId, email });
+
+//     if (!jobId) throw new Error("Missing jobId");
+//     if (!email) throw new Error("Missing email");
+//     if (!channelId) throw new Error("Missing channelId");
+//     if (!channelName) throw new Error("Missing channelName");
+//     if (!Array.isArray(ImprovedTitles) || ImprovedTitles.length === 0)
+//       throw new Error("ImprovedTitles empty");
+
+//     const RESEND_API_KEY = process.env.RESEND_API_KEY;
+//     const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
+
+//     if (!RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
+//     if (!RESEND_FROM_EMAIL) throw new Error("Missing RESEND_FROM_EMAIL");
+
+//     const jobData = await state.get("jobs", jobId);
+//     const thumbnail = jobData.videos.thumbnail
+
+//     //const channelId = jobData.
+
+//     if (jobData?.emailId && jobData?.status === "completed") {
+//       logger.info("Email already sent — skipping.");
+//       await emit({
+//         topic: "yt.titles.Email-Send",
+//         data: { jobId, email, emailId: jobData.emailId, alreadySent: true },
+//       });
+//       return;
+//     }
+
+//     await state.set("jobs", jobId, {
+//       ...(jobData || {}),
+//       status: "sending_email",
+//       updatedAt: new Date().toISOString(),
+//     });
+
+//     const htmlBody = GenerateEmailHTML(channelName, ImprovedTitles, channelId, email, thumbnail);
+//     const textBody = GenerateEmailTEXT(channelName, ImprovedTitles, channelId, email);
+
+//     const res = await fetch("https://api.resend.com/emails", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${RESEND_API_KEY}`,
+//       },
+//       body: JSON.stringify({
+//         from: RESEND_FROM_EMAIL,
+//         to: [email],
+//         subject: `Your Optimized Titles for ${channelName}`,
+//         html: htmlBody,
+//         text: textBody,
+//       }),
+//     });
+
+//     if (!res.ok) throw new Error("Resend API failed");
+
+//     const resJson = await res.json();
+//     const emailId = resJson?.id;
+
+//     await state.set("jobs", jobId, {
+//       ...(jobData || {}),
+//       status: "completed",
+//       emailId,
+//       completedAt: new Date().toISOString(),
+//     });
+
+//     await emit({
+//       topic: "yt.titles.Email-Send",
+//       data: { jobId, email, emailId },
+//     });
+  
+//   }
+//    catch (err: any) {
+//     logger.error("Email send failed", { error: err.message });
+
+//     if (jobId) {
+//       const jobData = await state.get("jobs", jobId);
+//       await state.set("jobs", jobId, {
+//         ...(jobData || {}),
+//         status: "failed",
+//         error: err.message,
+//       });
+//     }
+
+//     await emit({
+//       topic: "yt.titles.Email-Send.error",
+//       data: { jobId, email, error: err.message },
+//     });
+//   }
+// };
+
+// /* ---------------- Text fallback ---------------- */
+
+// export function GenerateEmailTEXT(channelName: string, titles: ImprovedTitle[], channelId:string, email:string) {
+//   let text = `Your Optimized YouTube Titles for ${channelName}\n\n`;
+//   titles.forEach((t, i) => {
+//     text += `Video ${i + 1}\n`;
+//     text += `Original: ${t.original}\n`;
+//     text += `Improved 1: ${t.improved1}\n`;
+//     text += `Improved 2: ${t.improved2}\n`;
+//     if (t.Why) text += `Why: ${t.Why}\n`;
+//     if (t.url) text += `Watch: ${t.url}\n`;
+//     text += `\n--------------------------\n\n`;
+//   });
+
+//   text += `Upgrade for ₹99: Full SEO descriptions, tags, and keyword strategy.\n`;
+//   text += `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
+//   text += `ReachAI — Smarter YouTube Growth\n`;
+//   return text;
+// }
+
+// /* ---------------- HTML Email (Version A, YouTube Red) ---------------- */
+
+// // export function GenerateEmailHTML(channelName: string, titles: ImprovedTitle[],channelId:string, email:string) {
+// //   const ytRed = "#FF0000";
+// // const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
+
+
+
+// // return `
+// // <!DOCTYPE html>
+// // <html>
+// //   <body style=" margin:0; padding:0; font-family: Arial, sans-serif;">
+// //     <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;">
+// //       <tr>
+// //         <td align="center">
+// //           <table width="100%" cellpadding="0" cellspacing="0" style="padding:10px;">
+
+// //             <!-- HEADER -->
+           
+
+// //             <tr>
+// //               <td style="font-size:15px; color:#333; line-height:1.5; padding-bottom:15px;">
+// //                 <strong style="font-size:18px;">Hey Creator 👋,</strong><br>
+// //                 Your AI-powered, trend-driven, SEO-optimized titles for 
+// //                 <strong>${escapeHtml(channelName)}</strong> are here!
+// //               </td>
+// //             </tr>
+
+// //             <!-- WHY IT WORKS -->
+// //             <tr>
+// //               <td style="font-size:14px; padding-bottom:20px; color:#444;">
+// //                 These were created using:
+// //                 <ul style="padding-left:18px; margin:8px 0;">
+// //                   <li>Your latest uploads</li>
+// //                   <li>Trending videos in your niche</li>
+// //                   <li>CTR & SEO title psychology</li>
+// //                   <!--<li>Real-time niche analysis</li>-->
+// //                 </ul>
+// //               </td>
+// //             </tr>
+
+// //             <!-- TITLES SECTION -->
+// //             <tr>
+// //               <td style="font-size:20px; font-weight:700; color:#000000; padding-bottom:12px;">
+// //                 ✨ Optimized Titles
+// //               </td>
+// //             </tr>
+
+// //           ${titles
+// //   .map(
+// //     (t, i) => `
+// //     <!-- Video Block Wrapper -->
+// //     <tr>
+// //       <td style="padding-bottom:16px;">
+// //         <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eee; border-radius:8px; padding:0; background:#fff;">
+// //           <tr>
+// //             <td style="padding:12px 16px;">
+
+// //               <!-- Video header -->
+// //               <div style="font-size:15px; font-weight:600; color:#333; margin-bottom:6px;">
+// //                 Video ${i + 1} • 
+// //                 <a href="${escapeAttr(t.url)}" style="color:#ff0000; text-decoration:none;">Watch now →</a>
+// //               </div>
+
+// //               <!-- Original -->
+// //               <div style="font-size:14px; color:#555; margin-bottom:6px;">
+// //                 <strong>Original:</strong> "${escapeHtml(t.original)}"
+// //               </div>
+
+// //               <!-- Improved 1 -->
+// //               <div style="font-size:14px; color:#555; margin-bottom:6px;">
+// //                 <strong>Improved 1:</strong> "${escapeHtml(t.improved1)}"
+// //               </div>
+
+// //               <!-- Improved 2 -->
+// //               <div style="font-size:14px; color:#555; margin-bottom:6px;">
+// //                 <strong>Improved 2:</strong> "${escapeHtml(t.improved2)}"
+// //               </div>
+
+// //               ${
+// //                 t.Why
+// //                   ? `
+// //               <div style="font-size:13px; color:#666; margin-top:10px;">
+// //                 <strong>Why it works:</strong> ${escapeHtml(t.Why)}
+// //               </div>`
+// //                   : ""
+// //               }
+
+// //             </td>
+// //           </tr>
+// //         </table>
+// //       </td>
+// //     </tr>`
+// //   )
+// //   .join("")}
+
+              
+              
+// //               <!-- CTA -->
+// // <tr>
+// //   <td style="padding-top:30px;">
+// //     <div style="
+// //       border: 1px solid #ddd;
+// //       border-radius: 12px;
+// //       padding: 24px;
+// //       background-color: #f9f9f9;
+// //       font-family: Arial, sans-serif;
+// //     ">
+// //       <!-- Title -->
+// //       <div style="font-size:16px; font-weight:bold; color:#111; margin-bottom:16px;">
+// //         🚀 Unlock Complete Metadata for Your Latest 10 Videos
+// //       </div>
+
+// //       <!-- Bullet Points -->
+// //       <ul style="padding-left:20px; margin:0 0 16px 0; color:#333; font-size:14px;">
+// //         <li>SEO-rich descriptions</li>
+// //         <li>Tags + Hashtags</li>
+// //         <li>Keyword strategy tailored for your niche</li>
+// //       </ul>
+
+// //       <!-- Price -->
+// //       <div style="font-size:14px; color:#333; text-align:center; margin-bottom:20px;">
+// //         All this for just <strong>₹99</strong>.
+// //       </div>
+
+// //       <!-- CTA Button -->
+// //       <div style="text-align:center;">
+// //         <a href="${urlCTA}"
+// //           style="
+// //             display:inline-block;
+// //             background-color:#ff0000;
+// //             color:#fff;
+// //             padding:14px 28px;
+// //             border-radius:8px;
+// //             text-decoration:none;
+// //             font-size:16px;
+// //             font-weight:bold;
+// //             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+// //             cursor:pointer;
+// //           ">
+// //           🔥 Upgrade & Boost SEO
+// //         </a>
+// //       </div>
+// //     </div>
+// //   </td>
+// // </tr>
+
+
+// //             <!-- FOOTER -->
+// //             <!--<tr>-->
+// //             <!--  <td style="font-size:13px; color:#777; padding-top:20px;">-->
+// //             <!--    Keep creating,<br>-->
+// //             <!--    <strong>ReachAI — Smarter YouTube Growth</strong><br>-->
+// //             <!--    https://reachaiapp.vercel.app-->
+// //             <!--  </td>-->
+// //             <!--</tr>-->
+            
+// //             <!-- FOOTER -->
+// // <tr>
+// //   <td style="font-size:13px; color:#777; padding-top:24px; text-align:center; line-height:1.6;">
+// //     Keep creating,<br>
+// //     <strong style="color:#333;">ReachAI — Smarter YouTube Growth</strong><br>
+// //     <a href="https://crateral-beastlier-kurtis.ngrok-free.dev/" style="color:#ff0000; text-decoration:none;">reachaiapp</a>
+// //   </td>
+// // </tr>
+
+
+// //           </table>
+// //         </td>
+// //       </tr>
+// //     </table>
+// //   </body>
+// // </html>
+// //   `;
+
+
+
+
+
+
+
+
+// // }
+
+// // /* -------- Escape helpers -------- */
+
+// // function escapeHtml(str?: string) {
+// //   if (!str) return "";
+// //   return String(str)
+// //     .replace(/&/g, "&amp;")
+// //     .replace(/</g, "&lt;")
+// //     .replace(/>/g, "&gt;")
+// //     .replace(/"/g, "&quot;");
+// // }
+
+// // function escapeAttr(str?: string) {
+// //   if (!str) return "";
+// //   return String(str).replace(/"/g, "%22").replace(/\n/g, "");
+// // }
+
+
+
+// /* ---------------- HTML Email (Version B — Premium UI) ---------------- */
+
+// export function GenerateEmailHTML(
+//   channelName: string,
+//   titles: ImprovedTitle[],
+//   channelId: string,
+//   email: string,
+//   thumbnail:string
+// ) {
+//   const ytRed = "#FF0000";
+//   const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
+
+//   return `
+// <!DOCTYPE html>
+// <html>
+// <head>
+//   <meta charset="utf-8">
+//   <style>
+//     body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; background:#f3f4f6; }
+//     table { border-collapse:collapse; }
+//     img { display:block; border:0; }
+//     .container { width:100%; max-width:650px; }
+//     @media only screen and (max-width:600px){
+//       .stack { display:block !important; width:100% !important; }
+//       .thumbnail { width:100% !important; height:auto !important; }
+//       .card { padding:18px !important; }
+//     }
+//   </style>
+// </head>
+
+// <body>
+
+// <table width="100%" style="background:#ffffff; padding:24px 0;">
+// <tr>
+// <td align="center">
+
+// <table width="100%" class="container" style="background:#ffffff; border-radius:6px; overflow:hidden;">
+// <tr><td style="padding:36px 32px;">
+
+// <!-- HEADER -->
+// <table width="100%">
+//   <tr>
+//     <td style="font-size:19px; font-weight:700; color:#111;">
+//       Hey Creator 👋
+//     </td>
+//   </tr>
+//   <tr>
+//     <td style="padding-top:6px; font-size:15px; color:#555; line-height:1.6;">
+//       Your AI-powered, trend-driven, SEO-optimized
+//       titles for <strong style="color:#111;">${escapeHtml(channelName)}</strong> are ready 🚀
+//     </td>
+//   </tr>
+// </table>
+
+// <!-- SECTION TITLE -->
+// <table width="100%" style="margin-top:28px;">
+// <tr>
+// <td style="font-size:17px; font-weight:700; padding-bottom:10px; border-bottom:2px solid #ff0000; color:#111;">
+//   ✨ Optimized Titles (${titles.length} Videos)
+// </td>
+// </tr>
+// </table>
+
+
+// ${titles
+//   .map(
+//     (t, i) => `
+// <!-- VIDEO CARD -->
+// <table width="100%" style="margin-top:24px; border:1px solid #e5e7eb; border-radius:10px;">
+// <tr><td style="padding:16px;">
+
+//   <!-- card header -->
+//   <table width="100%">
+//     <tr>
+//       <td style="font-size:14px; font-weight:600; color:#111;">🎬 Video ${i + 1}</td>
+//       <td align="right">
+//         <a href="${urlCTA}" style="color:#d00000; font-size:12px; font-weight:600; text-decoration:none;">
+//           Unlock Full Metadata →
+//         </a>
+//       </td>
+//     </tr>
+//   </table>
+
+//   <!-- content -->
+//   <table cellpadding="0" cellspacing="0" width="100%" style="margin-top:14px;">
+//     <tr>
+
+//       <!-- thumbnail (optional) -->
+//       ${
+//         t.thumbnail
+//           ? `
+//       <td class="stack" valign="center" width="200" style="padding-right:14px;">
+//         <img src="${escapeAttr(t.thumbnail)}"
+//              class="thumbnail"
+//              style="border-radius:8px; width:200px; height:114px;">
+//       </td>
+//       `
+//           : ""
+//       }
+
+//       <td class="stack" valign="top">
+
+//         <!-- original -->
+//         <div style="font-size:14px; color:#444; margin-bottom:10px;">
+//           <strong style="color:#222;">Original: </strong>
+//           <span style="color:#555;">${escapeHtml(t.original)}</span>
+//         </div>
+
+//         <!-- improved 1 -->
+//         <div style="padding:10px; background:#fffdf0; border-radius:6px; margin-bottom:8px; font-size:14px;">
+//           <strong style="color:#ff0000;">✓ 1: </strong>
+//           ${escapeHtml(t.improved1)}
+//         </div>
+
+//         <!-- improved 2 -->
+//         <div style="padding:10px; background:#fffdf0; border-radius:6px; font-size:14px;">
+//           <strong style="color:#ff0000;">✓ 2: </strong>
+//           ${escapeHtml(t.improved2)}
+//         </div>
+
+//       </td>
+//     </tr>
+//   </table>
+
+//   ${
+//     t.Why
+//       ? `
+//   <table width="100%" style="margin-top:12px;">
+//     <tr>
+//       <td style="background:#fef3c7; padding:12px; border-radius:6px;">
+//         <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#78350f; margin-bottom:4px;">💡 Why This Works</div>
+//         <div style="font-size:13px; color:#78350f; line-height:1.5;">
+//           ${escapeHtml(t.Why)}
+//         </div>
+//       </td>
+//     </tr>
+//   </table>`
+//       : ""
+//   }
+
+// </td></tr>
+// </table>
+// `
+//   )
+//   .join("")}
+
+
+// <!-- ================= PREMIUM DIVIDER ================= -->
+// <table width="100%" style="margin:30px 0;">
+//   <tr><td style="height:1px; background:#e5e7eb;"></td></tr>
+// </table>
+
+
+// <!-- ================= CTA HERO ================= -->
+// <tr>
+// <td style="background:#111; padding:42px 10px; text-align:center;">
+//   <div style="color:#9ca3af; font-size:14px; margin-bottom:12px;">Limited Time — 50% OFF</div>
+
+//   <div style="margin-bottom:20px;">
+//     <span style="color:#6b7280; text-decoration:line-through; font-size:20px;">₹199</span>
+//     <span style="color:#fff; font-size:38px; font-weight:800; margin-left:10px;">₹99</span>
+//   </div>
+
+//   <a href="${urlCTA}"
+//      style="background:#d00000; padding:16px 40px; border-radius:10px; color:#fff;
+//             text-decoration:none; font-size:18px; font-weight:700;
+//             box-shadow:0 8px 22px rgba(208,0,0,.35);">
+//     Unlock Full Metadata →
+//   </a>
+
+//   <div style="color:#9ca3af; font-size:12px; margin-top:16px; line-height:1.6;">
+//     Instant delivery • One-time payment • No recurring fees
+//   </div>
+// </td>
+// </tr>
+
+// <!-- FOOTER -->
+// <tr>
+// <td style="padding:22px; text-align:center;">
+//   <div style="font-size:13px; color:#6b7280; line-height:1.7;">
+//     Keep creating,<br>
+//     <span style="font-weight:600; color:#111;">ReachAI — Smarter YouTube Growth</span><br>
+//     <a href="https://reachaiapp.vercel.app" style="color:#d00000;text-decoration:none;">reachaiapp</a>
+//   </div>
+// </td>
+// </tr>
+
+// </table>
+
+// </td>
+// </tr>
+// </table>
+
+// </body>
+// </html>
+// `;
+// }
+
+// /* -------- Escape helpers -------- */
+// function escapeHtml(str?: string) {
+//   if (!str) return "";
+//   return String(str)
+//     .replace(/&/g, "&amp;")
+//     .replace(/</g, "&lt;")
+//     .replace(/>/g, "&gt;")
+//     .replace(/"/g, "&quot;");
+// }
+
+// function escapeAttr(str?: string) {
+//   if (!str) return "";
+//   return String(str).replace(/"/g, "%22").replace(/\n/g, "");
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+// --- Event: Send Email With Optimized Titles ----
 import { EventConfig, Logger } from "motia";
 
 /**
- * Step-8: Send email using Resend with AI optimized titles.
+ * Step-8: Send email using Resend with AI optimized titles + thumbnails
  */
 
 export const config = {
@@ -369,12 +993,10 @@ type ImprovedTitle = {
   improved2: string;
   Why?: string;
   url?: string;
+  thumbnail?: string; // <— ADDED
 };
 
-export const handler = async (
-  eventData: any,
-  { emit, logger, state }: { emit: any; logger: Logger; state: any }
-) => {
+export const handler = async (eventData: any, { emit, logger, state }: { emit: any; logger: Logger; state: any }) => {
   let jobId: string | undefined;
   let email: string | undefined;
 
@@ -384,7 +1006,7 @@ export const handler = async (
     jobId = data.jobId;
     email = data.email;
     const channelName: string = data.channelName;
-    const channelId:string = data.channelId
+    const channelId: string = data.channelId;
     const ImprovedTitles: ImprovedTitle[] = data.ImprovedTitles || [];
 
     logger.info("send-email-with-titles triggered", { jobId, email });
@@ -393,7 +1015,7 @@ export const handler = async (
     if (!email) throw new Error("Missing email");
     if (!channelId) throw new Error("Missing channelId");
     if (!channelName) throw new Error("Missing channelName");
-    if (!Array.isArray(ImprovedTitles) || ImprovedTitles.length === 0)
+    if (!ImprovedTitles?.length)
       throw new Error("ImprovedTitles empty");
 
     const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -402,10 +1024,26 @@ export const handler = async (
     if (!RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
     if (!RESEND_FROM_EMAIL) throw new Error("Missing RESEND_FROM_EMAIL");
 
+    // Get video data from previous steps
     const jobData = await state.get("jobs", jobId);
 
-    //const channelId = jobData.
+    /**
+     * jobData.videos MUST BE AN ARRAY LIKE:
+     * [
+     *   { thumbnail: "...", url: "...", title: "...", ...},
+     * ]
+     */
+    const videoList = jobData?.videos || [];
 
+    // Merge thumbnails into ImprovedTitles
+    const titlesWithThumb = ImprovedTitles.map((t, i) => ({
+      ...t,
+      thumbnail: videoList[i]?.thumbnail || null,
+      url: videoList[i]?.url || t.url
+    }));
+
+
+    // prevent double send
     if (jobData?.emailId && jobData?.status === "completed") {
       logger.info("Email already sent — skipping.");
       await emit({
@@ -421,8 +1059,20 @@ export const handler = async (
       updatedAt: new Date().toISOString(),
     });
 
-    const htmlBody = GenerateEmailHTML(channelName, ImprovedTitles, channelId, email);
-    const textBody = GenerateEmailTEXT(channelName, ImprovedTitles, channelId, email);
+    // Generate email
+    const htmlBody = GenerateEmailHTML(
+      channelName,
+      titlesWithThumb,
+      channelId,
+      email
+    );
+
+    const textBody = GenerateEmailTEXT(
+      channelName,
+      titlesWithThumb,
+      channelId,
+      email
+    );
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -455,9 +1105,8 @@ export const handler = async (
       topic: "yt.titles.Email-Send",
       data: { jobId, email, emailId },
     });
-  
-  }
-   catch (err: any) {
+
+  } catch (err: any) {
     logger.error("Email send failed", { error: err.message });
 
     if (jobId) {
@@ -476,9 +1125,16 @@ export const handler = async (
   }
 };
 
-/* ---------------- Text fallback ---------------- */
 
-export function GenerateEmailTEXT(channelName: string, titles: ImprovedTitle[], channelId:string, email:string) {
+/* -------------------------------------------------------------------
+-------------------- TEXT FALLBACK -----------------------------------
+---------------------------------------------------------------------*/
+export function GenerateEmailTEXT(
+  channelName: string,
+  titles: ImprovedTitle[],
+  channelId: string,
+  email: string
+) {
   let text = `Your Optimized YouTube Titles for ${channelName}\n\n`;
   titles.forEach((t, i) => {
     text += `Video ${i + 1}\n`;
@@ -490,475 +1146,653 @@ export function GenerateEmailTEXT(channelName: string, titles: ImprovedTitle[], 
     text += `\n--------------------------\n\n`;
   });
 
-  text += `Upgrade for ₹99: Full SEO descriptions, tags, and keyword strategy.\n`;
+  text += `Unlock full metadata for ₹99:\n`;
   text += `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
-  text += `ReachAI — Smarter YouTube Growth\n`;
+  text += `\nReachAI — Smarter YouTube Growth\n`;
   return text;
 }
 
-/* ---------------- HTML Email (Version A, YouTube Red) ---------------- */
-
-export function GenerateEmailHTML(channelName: string, titles: ImprovedTitle[],channelId:string, email:string) {
-  const ytRed = "#FF0000";
-const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
 
 
+/* ---------------- HTML Email (Version B — Premium UI) ---------------- */
+
+export function GenerateEmailHTML(
+  channelName: string,
+  titles: ImprovedTitle[],
+  channelId: string,
+  email: string
+) {
+
+  const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
+
+  return `<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  table { border-collapse: collapse; }
+  img { display:block; outline:none; text-decoration:none; }
+  body {
+    margin:0;
+    padding:0;
+    font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+    background:#ffffff;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- FULL BACKGROUND -->
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+<tr>
+<td align="center">
+
+<!-- 650px CONTAINER -->
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="max-width:650px;margin:auto;">
+
+<!-- =================================== HEADER START =================================== -->
+<tr>
+  <td style="padding:24px 16px 10px 16px;">
+    <table width="100%">
+      <tr>
+
+
+
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size:20px;font-weight:700;color:#111;"> Hey Creator </td>
+                      <td style="font-size:18px; padding-left:4px">👋 </td>
+                    </tr>
+                </table>
+
+
+      </tr>
+    </table>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 16px 14px 16px;">
+    <table width="100%">
+      <tr>
+        <td style="font-size:14px;color:#555;line-height:1.6;">
+          Your AI-powered, trend-driven & SEO-optimized titles for
+          <strong style="color:#111;">${escapeHtmlWithEmoji(channelName)}</strong>
+are ready.
+          <br>
+          These are generated using real-time niche performance,
+          CTR psychology, and keyword signals from your recent uploads.
+          <br>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<!-- =================================== HEADER END =================================== -->
+
+
+
+<!-- =================================== SECTION TITLE =================================== -->
+<tr>
+  <td style="padding:0 8px;">
+    <table width="100%">
+      <tr>
+        <td style="font-size:16px; font-weight:700; color:#111; border-left:4px solid #ff0000; padding:12px 0 12px 12px;">
+          Optimized Titles
+          <span style="color:#666; font-weight:400; margin-left:8px; font-size:13px;">
+            (${titles.length} videos)
+          </span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<!-- ========================================================================= -->
+
+
+${titles.map((t, i) => {
+
+const id = extractYoutubeId(t.url);
+const thumb = id
+  ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
+  : escapeAttr(t.thumbnail || "");
 
 return `
-<!DOCTYPE html>
-<html>
-  <body style=" margin:0; padding:0; font-family: Arial, sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;">
-      <tr>
-        <td align="center">
-          <table width="100%" cellpadding="0" cellspacing="0" style="padding:10px;">
+<!-- ==================== VIDEO CARD ==================== -->
+<tr>
+<td style="padding:12px 8px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;">
+    <tr><td style="padding:12px;">
 
-            <!-- HEADER -->
-           
+      <!-- CARD HEADER -->
+      <table width="100%">
+        <tr>
 
-            <tr>
-              <td style="font-size:15px; color:#333; line-height:1.5; padding-bottom:15px;">
-                <strong style="font-size:18px;">Hey Creator 👋,</strong><br>
-                Your AI-powered, trend-driven, SEO-optimized titles for 
-                <strong>${escapeHtml(channelName)}</strong> are here!
-              </td>
-            </tr>
 
-            <!-- WHY IT WORKS -->
-            <tr>
-              <td style="font-size:14px; padding-bottom:20px; color:#444;">
-                These were created using:
-                <ul style="padding-left:18px; margin:8px 0;">
-                  <li>Your latest uploads</li>
-                  <li>Trending videos in your niche</li>
-                  <li>CTR & SEO title psychology</li>
-                  <!--<li>Real-time niche analysis</li>-->
-                </ul>
-              </td>
-            </tr>
 
-            <!-- TITLES SECTION -->
-            <tr>
-              <td style="font-size:20px; font-weight:700; color:#000000; padding-bottom:12px;">
-                ✨ Optimized Titles
-              </td>
-            </tr>
 
-          ${titles
-  .map(
-    (t, i) => `
-    <!-- Video Block Wrapper -->
+
+        <table cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size:14px; padding-right:4px">🎬 </td>
+                      <td style="font-size:14px;font-weight:700;color:#111;"> Video ${i+1} </td>
+                    
+                    </tr>
+                </table>
+
+          <td align="right">
+            <a href="${urlCTA}"
+               style="font-size:12px;color:#d00000;text-decoration:none;font-weight:600;">
+              Preview Full Metadata →
+            </a>
+          </td>
+        </tr>
+      </table>
+
+
+      <!-- THUMBNAIL -->
+      ${
+        thumb ? `
+      <table width="100%" style="margin-top:10px;">
+        <tr>
+          <td align="center">
+            <img src="${thumb}" width="100%"
+            style="max-width:620px;height:auto;border-radius:10px;">
+          </td>
+        </tr>
+      </table>
+      ` : ""
+      }
+
+
+      <!-- ORIGINAL TITLE -->
+      <table width="100%" style="margin-top:14px;">
+        <tr>
+          <td style="font-size:14px;font-weight:700;text-transform:uppercase;color:#444;">
+            Original Title
+          </td>
+        </tr>
+        <tr>
+          <td style="font-size:14px;color:#222;padding-top:4px;">
+            ${escapeHtmlWithEmoji(t.original)}
+
+          </td>
+        </tr>
+      </table>
+
+
+      <!-- OPTIMIZED TITLES -->
+      <table width="100%" style="margin-top:14px;">
+        <tr>
+          <td style="font-size:14px;font-weight:700;text-transform:uppercase;color:#d00000;">
+            Optimized Titles
+          </td>
+        </tr>
+
+        <!-- spacing -->
+        <tr><td height="6"></td></tr>
+
+        <tr>
+          <td style="background:#fffdf0;border-radius:6px;padding:10px;font-size:14px;color:#333;">
+            <span style="font-weight:700;color:#ff0000;">1:</span>
+            ${escapeHtmlWithEmoji(t.improved1)}
+          </td>
+        </tr>
+
+        <!-- spacing -->
+        <tr><td height="8"></td></tr>
+
+        <tr>
+          <td style="background:#fffdf0;border-radius:6px;padding:10px;font-size:14px;color:#333;">
+            <span style="font-weight:700;color:#ff0000;">2:</span>
+            ${escapeHtmlWithEmoji(t.improved2)}
+          </td>
+        </tr>
+      </table>
+
+
+      ${
+        t.Why ? `
+      <!-- WHY THIS WORKS -->
+      <table width="100%" style="margin-top:14px;">
+        <tr>
+          <td style="background:#fff4cd;padding:12px;border-radius:6px;">
+            <table width="100%">
+              <tr>
+                <td style="font-size:10px;text-transform:uppercase;color:#9a5000;font-weight:700;">
+                  <table cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size:13px; padding-right:4px">💡</td>
+                      <td style="font-size:13px; color:#92400e;">Why This Works</td>
+                    </tr>
+                </table>
+
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top:4px;font-size:13px;color:#7a3c07;line-height:1.45;">
+                  ${t.Why ? escapeHtmlWithEmoji(t.Why) : ""}
+
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      ` : ""
+      }
+
+    </td></tr>
+  </table>
+</td>
+</tr>
+`;
+}).join("")}
+
+
+
+
+<!-- ===================================================================== -->
+<!-- ==================== FULL PREMIUM METADATA PREVIEW ================== -->
+<!-- ===================================================================== -->
+
+<tr>
+<td style="padding:20px 8px;">
+  <table width="100%" cellpadding="0" cellspacing="0"
+         style="border:1px solid #e5e7eb;border-radius:10px;">
+
+
+    <!-- TOP HERO -->
     <tr>
-      <td style="padding-bottom:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eee; border-radius:8px; padding:0; background:#fff;">
+      <td style="background:#111;border-radius:10px 10px 0 0;padding:16px;text-align:center;">
+        <table width="100%">
+         
+        
+        <tr>
+            <td align="center" style="font-size:18px; font-weight:700; color:#ffffff;">
+
+
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size:18px; padding-left:4px">🔓</td>
+                      <td style="font-size:18px;font-weight:700;color:#ffffff;"> Unlock Full Metadata for Your Latest 10 Videos </td>
+                    </tr>
+                </table>
+
+               
+
+
+            </td>
+          </tr>
+
+          
           <tr>
-            <td style="padding:12px 16px;">
-
-              <!-- Video header -->
-              <div style="font-size:15px; font-weight:600; color:#333; margin-bottom:6px;">
-                Video ${i + 1} • 
-                <a href="${escapeAttr(t.url)}" style="color:#ff0000; text-decoration:none;">Watch now →</a>
-              </div>
-
-              <!-- Original -->
-              <div style="font-size:14px; color:#555; margin-bottom:6px;">
-                <strong>Original:</strong> "${escapeHtml(t.original)}"
-              </div>
-
-              <!-- Improved 1 -->
-              <div style="font-size:14px; color:#555; margin-bottom:6px;">
-                <strong>Improved 1:</strong> "${escapeHtml(t.improved1)}"
-              </div>
-
-              <!-- Improved 2 -->
-              <div style="font-size:14px; color:#555; margin-bottom:6px;">
-                <strong>Improved 2:</strong> "${escapeHtml(t.improved2)}"
-              </div>
-
-              ${
-                t.Why
-                  ? `
-              <div style="font-size:13px; color:#666; margin-top:10px;">
-                <strong>Why it works:</strong> ${escapeHtml(t.Why)}
-              </div>`
-                  : ""
-              }
-
+            <td style="padding-top:4px;font-size:12px;color:#bfbfbf;">
+              Titles • Descriptions • Tags • Hashtags
             </td>
           </tr>
         </table>
       </td>
-    </tr>`
-  )
-  .join("")}
+    </tr>
 
-              
-              
-              <!-- CTA -->
+
+<!-- SAMPLE BLOCK -->
 <tr>
-  <td style="padding-top:30px;">
-    <div style="
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 24px;
-      background-color: #f9f9f9;
-      font-family: Arial, sans-serif;
-    ">
-      <!-- Title -->
-      <div style="font-size:16px; font-weight:bold; color:#111; margin-bottom:16px;">
-        🚀 Unlock Complete Metadata for Your Latest 10 Videos
-      </div>
+  <td style="padding:8px;">
 
-      <!-- Bullet Points -->
-      <ul style="padding-left:20px; margin:0 0 16px 0; color:#333; font-size:14px;">
-        <li>SEO-rich descriptions</li>
-        <li>Tags + Hashtags</li>
-        <li>Keyword strategy tailored for your niche</li>
-      </ul>
-
-      <!-- Price -->
-      <div style="font-size:14px; color:#333; text-align:center; margin-bottom:20px;">
-        All this for just <strong>₹99</strong>.
-      </div>
-
-      <!-- CTA Button -->
-      <div style="text-align:center;">
-        <a href="${urlCTA}"
-          style="
-            display:inline-block;
-            background-color:#ff0000;
-            color:#fff;
-            padding:14px 28px;
-            border-radius:8px;
-            text-decoration:none;
-            font-size:16px;
-            font-weight:bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor:pointer;
-          ">
-          🔥 Upgrade & Boost SEO
-        </a>
-      </div>
-    </div>
-  </td>
-</tr>
-
-
-            <!-- FOOTER -->
-            <!--<tr>-->
-            <!--  <td style="font-size:13px; color:#777; padding-top:20px;">-->
-            <!--    Keep creating,<br>-->
-            <!--    <strong>ReachAI — Smarter YouTube Growth</strong><br>-->
-            <!--    https://reachaiapp.vercel.app-->
-            <!--  </td>-->
-            <!--</tr>-->
-            
-            <!-- FOOTER -->
-<tr>
-  <td style="font-size:13px; color:#777; padding-top:24px; text-align:center; line-height:1.6;">
-    Keep creating,<br>
-    <strong style="color:#333;">ReachAI — Smarter YouTube Growth</strong><br>
-    <a href="https://crateral-beastlier-kurtis.ngrok-free.dev/" style="color:#ff0000; text-decoration:none;">reachaiapp</a>
-  </td>
-</tr>
-
-
-          </table>
+    <!-- HD THUMBNAIL -->
+    <table width="100%">
+      <tr>
+        <td align="center">
+          <img src="https://i.ytimg.com/vi/sscX432bMZo/maxresdefault.jpg"
+               width="100%" style="max-width:634px;border-radius:8px;">
         </td>
       </tr>
     </table>
-  </body>
+
+    <!-- SAMPLE DETAILS -->
+    <table width="100%" cellpadding="0" cellspacing="0"
+           style="margin-top:16px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
+
+
+      <!-- SAMPLE HEADER -->
+      <tr>
+       
+      
+      
+      
+      
+      <td style="background:#f9fafb;padding:14px 16px;border-bottom:1px solid #e5e7eb;">
+          <span style="font-size:14px;font-weight:700;color:#111;">
+            Complete Metadata Example (Video 1)
+          </span>
+        </td>
+
+
+
+      </tr>
+
+
+      <!-- BODY -->
+      <tr>
+        <td style="padding:16px;background:#ffffff;">
+
+
+          <!-- ORIGINAL TITLE -->
+          <table width="100%">
+            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#6b7280;">
+              Original Title
+            </td></tr>
+            <tr><td style="padding-top:4px;font-size:14px;color:#111;">
+              How to Build a PC in 2024
+            </td></tr>
+          </table>
+
+          <table width="100%"><tr><td height="14"></td></tr></table>
+
+
+          <!-- OPTIMIZED TITLES -->
+          <table width="100%">
+            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+              Optimized Titles
+            </td></tr>
+
+            <tr>
+              <td style="padding-top:6px;">
+                <table width="100%" style="background:#fffafa;border-left:2px solid #d00000;border-radius:4px;">
+                  <tr><td style="padding:10px;font-size:13px;color:#111;">
+                    Build Your DREAM Gaming PC in 2024 (Step-by-Step Guide)
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding-top:6px;">
+                <table width="100%" style="background:#fffafa;border-left:2px solid #d00000;border-radius:4px;">
+                  <tr><td style="padding:10px;font-size:13px;color:#111;">
+                    PC Building Made EASY — Complete 2024 Beginner's Guide
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+          <table width="100%"><tr><td height="14"></td></tr></table>
+
+
+          <!-- SEO DESCRIPTION -->
+          <table width="100%">
+            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+              SEO Description
+            </td></tr>
+            <tr>
+              <td style="padding-top:6px;">
+                <table width="100%"
+                       style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;">
+                  <tr><td style="padding:12px;font-size:13px;color:#444;line-height:1.5;">
+                    Want to build your dream gaming PC but don't know where to start? This full beginner-friendly 2024 guide…
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+
+          <!-- TAGS -->
+          <table width="100%" style="margin-top:14px;">
+            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+              Tags
+            </td></tr>
+            <tr>
+              <td style="padding-top:6px;">
+                <table width="100%"
+                       style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;">
+                  <tr><td style="padding:10px;font-size:12px;color:#444;">
+                    PC Build, Gaming PC, How to Build PC, PC Tutorial
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+
+          <!-- HASHTAGS -->
+          <table width="100%" style="margin-top:10px;">
+            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+              Hashtags
+            </td></tr>
+            <tr>
+              <td style="padding-top:6px;">
+                <table width="100%"
+                       style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;">
+                  <tr><td style="padding:10px;font-size:12px;color:#444;">
+                    #PCBuild #GamingPC #TechTutorial #2024Guide
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+
+          <!-- WHY THIS WORKS -->
+          <table width="100%" style="margin-top:14px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;">
+            <tr>
+
+
+            
+
+
+
+
+
+
+
+              <td style="padding:10px;font-size:13px;color:#784f03;">
+                <span style="font-size:12px;font-weight:700;text-transform:uppercase;color:#92400e;">
+
+                  <table cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="font-size:12px; padding-right:4px">💡</td>
+                      <td style="font-size:12px; color:#92400e;">Why This Works</td>
+                    </tr>
+                </table>
+                
+                </span><br>
+                Emotional hook, clear value, beginner-friendly language, and SEO keywords.
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
+  </td>
+</tr>
+
+      </td>
+    </tr>
+
+
+    <!-- FEATURES -->
+    <tr>
+      <td style="padding:16px;">
+        <table width="100%">
+          <tr><td style="font-size:14px;font-weight:700;color:#111;">
+            What You Get
+          </td></tr>
+
+          ${[
+            "Metadata for your latest 10 videos",
+            "2 optimized titles per video",
+            "300+ word SEO descriptions",
+            "AI-researched tags",
+            "Trending hashtags",
+            "CTR psychology explanations"
+          ].map(item=>`
+          <tr>
+            <td style="padding-top:6px;">
+              <table>
+                <tr>
+                  <td width="18" style="color:#d00000;font-size:14px;">✔</td>
+                  <td style="font-size:13px;color:#444;">${item}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>`).join("")}
+        </table>
+      </td>
+    </tr>
+
+
+    <!-- CTA -->
+    <tr>
+      <td style="background:#111;padding:30px;text-align:center;border-radius:0 0 10px 10px;">
+        <table width="100%">
+          <tr>
+            <td style="font-size:12px;color:#9ca3af;">
+              Limited-time — 50% OFF
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;">
+              <span style="text-decoration:line-through;color:#6b7280;font-size:16px;">₹199</span>
+              <span style="color:#ffffff;font-size:32px;font-weight:800;padding-left:6px;">₹99</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="${urlCTA}"
+                 style="background:#d00000;color:#fff;padding:12px 40px;font-size:16px;font-weight:700;border-radius:8px;text-decoration:none;display:inline-block;">
+                Unlock Full Metadata →
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top:10px;font-size:11px;color:#9ca3af;">
+              Instant delivery • One-time payment • No recurring fees
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+
+  </table>
+</td>
+</tr>
+
+<!-- FOOTER -->
+<tr>
+<td style="text-align:center;color:#777;font-size:12px;padding:18px;">
+  Keep creating,<br>
+  <strong style="color:#111;">ReachAI — Smarter YouTube Growth</strong><br>
+  <a href="https://reachaiapp.vercel.app" style="color:#d00000;text-decoration:none;">
+    reachaiapp
+  </a>
+</td>
+</tr>
+
+
+</table>
+</td>
+</tr>
+</table>
+
+</body>
 </html>
-  `;
-
-
-
-
-
-
-
-// return `<!DOCTYPE html>
-// <html>
-//   <head>
-//     <meta charset="utf-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>ReachAI Email Preview</title>
-//   </head>
-//   <body style="margin:0; padding:0; background:#fafafa; font-family: Inter, Arial, sans-serif;">
-
-//     <table width="100%" cellpadding="0" cellspacing="0">
-//       <tr>
-//         <td align="center">
-
-//           <!-- MAIN CONTAINER -->
-//           <table width="100%" cellpadding="0" cellspacing="0" style="max-width:650px; background:white; padding:28px; margin-top:20px; border-radius:14px; box-shadow:0 5px 20px rgba(0,0,0,0.08);">
-
-//             <!-- HEADER -->
-//             <tr>
-//               <td style="padding-bottom:20px; text-align:center;">
-//                 <!-- Accented Header Title (RED) -->
-//                 <div style="font-size:24px; color:#111; font-weight:700; padding-bottom:8px; display:inline-block; border-bottom:3px solid #FF2D2D; line-height:1.2;">
-//                   🚀 Your SEO-Optimized Titles Are Ready!
-//                 </div>
-//               </td>
-//             </tr>
-
-//             <tr>
-//               <td style="font-size:16px; color:#333; line-height:1.6; padding-bottom:25px; text-align:center;">
-//                 Hey Creator, <br>
-//                 Your AI-powered, trend-driven, SEO-optimized titles for  
-//                 <strong style="color:#000;">TechExplorer Daily</strong> are here!
-//               </td>
-//             </tr>
-
-//             <!-- WHY SECTION -->
-//             <tr>
-//               <td style="font-size:15px; padding:16px; background:#fff8f8; border-radius:10px; color:#444; line-height:1.5; border:1px solid #ffebeb;">
-//                 These titles are optimized using:
-//                 <ul style="margin:10px 0 0 20px; padding:0;">
-//                   <li>Your latest uploads</li>
-//                   <li>Trending videos in your niche</li>
-//                   <li>CTR & SEO title psychology</li>
-//                 </ul>
-//               </td>
-//             </tr>
-
-//             <!-- TITLES SECTION -->
-//             <tr>
-//               <td style="font-size:22px; font-weight:700; color:#000; padding:30px 0 15px;">
-//                 ✨ Optimized Titles
-//               </td>
-//             </tr>
-
-//             <!-- MOCK ITEM 1 - STACKABLE CARD -->
-//             <tr>
-//               <td style="padding-bottom:25px;">
-//                 <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:12px; border:1px solid #e0e0e0; background:white; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
-//                   <tr>
-//                     <td style="padding:20px;">
-                      
-//                       <!--[if mso | IE]>
-//                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="600">
-//                       <tr>
-//                       <td align="left" valign="top" width="180">
-//                       <![endif]-->
-
-//                       <!-- LEFT COLUMN: THUMBNAIL WRAPPER -->
-//                       <div style="display:inline-block; width:100%; max-width:180px; vertical-align:top;">
-//                         <table width="100%" cellpadding="0" cellspacing="0" style="width:100%;">
-//                           <tr>
-//                             <td style="padding-bottom:10px;">
-//                               <a href="#" style="display:block; text-decoration:none;">
-//                                 <img src="https://placehold.co/180x101/ffcccc/b00000?text=Video+%E2%96%B6" 
-//                                      alt="Watch Video" 
-//                                      width="180" height="101"
-//                                      style="width:100%; max-width:180px; height:auto; border-radius:8px; display:block; border:0;">
-//                               </a>
-//                             </td>
-//                           </tr>
-//                         </table>
-//                       </div>
-
-//                       <!--[if mso | IE]>
-//                       </td>
-//                       <td align="left" valign="top" width="420" style="padding-left: 20px;">
-//                       <![endif]-->
-
-//                       <!-- RIGHT COLUMN: TEXT CONTENT WRAPPER -->
-//                       <div style="display:inline-block; width:100%; max-width:420px; vertical-align:top; padding-left:15px;">
-//                         <table width="100%" cellpadding="0" cellspacing="0">
-//                           <tr>
-//                             <td>
-//                               <div style="font-size:16px; font-weight:600; color:#111; margin-bottom:6px; margin-top: -5px;">
-//                                 Video 1 • 
-//                                 <a href="#" 
-//                                    style="color:#E53935; text-decoration:none; font-weight:600;">
-//                                   View →  
-//                                 </a>
-//                               </div>
-
-//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
-//                                 <strong>Original:</strong> “Reviewing the new Camera”
-//                               </div>
-
-//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
-//                                 <strong>Improved 1:</strong> “Is This Camera Worth The Hype? Honest Review”
-//                               </div>
-
-//                               <div style="font-size:14px; color:#555; margin-bottom:12px;">
-//                                 <strong>Improved 2:</strong> “Stop! Don't Buy a Camera Until You See This”
-//                               </div>
-                              
-//                               <div style="font-size:13px; color:#666; background:#fef0f0; padding:10px; border-radius:8px; border:1px solid #ffe0e0;">
-//                                 <strong>Why it works:</strong> Creates immediate curiosity and addresses potential buyer's remorse, increasing click-through rate.
-//                               </div>
-//                             </td>
-//                           </tr>
-//                         </table>
-//                       </div>
-
-//                       <!--[if mso | IE]>
-//                       </td>
-//                       </tr>
-//                       </table>
-//                       <![endif]-->
-
-//                     </td>
-//                   </tr>
-//                 </table>
-//               </td>
-//             </tr>
-
-//             <!-- MOCK ITEM 2 - STACKABLE CARD -->
-//             <tr>
-//               <td style="padding-bottom:25px;">
-//                 <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:12px; border:1px solid #e0e0e0; background:white; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
-//                   <tr>
-//                     <td style="padding:20px;">
-                      
-//                       <!--[if mso | IE]>
-//                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="600">
-//                       <tr>
-//                       <td align="left" valign="top" width="180">
-//                       <![endif]-->
-
-//                       <!-- LEFT COLUMN: THUMBNAIL WRAPPER -->
-//                       <div style="display:inline-block; width:100%; max-width:180px; vertical-align:top;">
-//                         <table width="100%" cellpadding="0" cellspacing="0" style="width:100%;">
-//                           <tr>
-//                             <td style="padding-bottom:10px;">
-//                               <a href="#" style="display:block; text-decoration:none;">
-//                                 <img src="https://placehold.co/180x101/ffcccc/b00000?text=Video+%E2%96%B6" 
-//                                      alt="Watch Video" 
-//                                      width="180" height="101"
-//                                      style="width:100%; max-width:180px; height:auto; border-radius:8px; display:block; border:0;">
-//                               </a>
-//                             </td>
-//                           </tr>
-//                         </table>
-//                       </div>
-
-//                       <!--[if mso | IE]>
-//                       </td>
-//                       <td align="left" valign="top" width="420" style="padding-left: 20px;">
-//                       <![endif]-->
-
-//                       <!-- RIGHT COLUMN: TEXT CONTENT WRAPPER -->
-//                       <div style="display:inline-block; width:100%; max-width:420px; vertical-align:top; padding-left:15px;">
-//                         <table width="100%" cellpadding="0" cellspacing="0">
-//                           <tr>
-//                             <td>
-//                               <div style="font-size:16px; font-weight:600; color:#111; margin-bottom:6px; margin-top: -5px;">
-//                                 Video 2 • 
-//                                 <a href="#" 
-//                                    style="color:#E53935; text-decoration:none; font-weight:600;">
-//                                   View →  
-//                                 </a>
-//                               </div>
-
-//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
-//                                 <strong>Original:</strong> “My Trip to Japan Vlog”
-//                               </div>
-
-//                               <div style="font-size:14px; color:#555; margin-bottom:4px;">
-//                                 <strong>Improved 1:</strong> “I Moved to Japan... Here is the Truth”
-//                               </div>
-
-//                               <div style="font-size:14px; color:#555; margin-bottom:12px;">
-//                                 <strong>Improved 2:</strong> “10 Things I Wish I Knew Before Visiting Japan”
-//                               </div>
-                              
-//                               <div style="font-size:13px; color:#666; background:#fef0f0; padding:10px; border-radius:8px; border:1px solid #ffe0e0;">
-//                                 <strong>Why it works:</strong> Focuses on insider knowledge and personal transformation, which performs well in travel niches.
-//                               </div>
-//                             </td>
-//                           </tr>
-//                         </table>
-//                       </div>
-
-//                       <!--[if mso | IE]>
-//                       </td>
-//                       </tr>
-//                       </table>
-//                       <![endif]-->
-
-//                     </td>
-//                   </tr>
-//                 </table>
-//               </td>
-//             </tr>
-
-//             <!-- CTA SECTION -->
-//             <tr>
-//               <td style="padding-top:35px;">
-//                 <div style="background:#fff4f4; border:1px solid #ffcccc; padding:28px; border-radius:14px; box-shadow:0 4px 18px rgba(255,0,0,0.1); text-align:center;">
-
-//                   <div style="font-size:18px; font-weight:bold; color:#B00000; margin-bottom:12px;">
-//                     🚀 Unlock Full Metadata for All 10 Videos
-//                   </div>
-
-//                   <ul style="font-size:14px; color:#444; text-align:left; max-width:300px; margin:0 auto 18px;">
-//                     <li>SEO-rich descriptions</li>
-//                     <li>Tags + Hashtags</li>
-//                     <li>Niche-targeted keyword strategy</li>
-//                     <li>Better ranking + more clicks</li>
-//                   </ul>
-
-//                   <div style="font-size:15px; margin-bottom:18px; color:#333;">
-//                     Everything for just <strong style="color:#D00000;">₹99</strong>.
-//                   </div>
-
-//                   <a href="#"
-//                     style="
-//                       display:inline-block;
-//                       background:#FF2D2D;
-//                       color:#fff;
-//                       padding:16px 32px;
-//                       border-radius:10px;
-//                       text-decoration:none;
-//                       font-size:17px;
-//                       font-weight:700;
-//                       box-shadow:0 6px 16px rgba(255,0,0,0.25);
-//                     ">
-//                     🔥 Upgrade & Boost Your Channel
-//                   </a>
-
-//                 </div>
-//               </td>
-//             </tr>
-
-//             <!-- FOOTER -->
-//             <tr>
-//               <td style="font-size:12px; color:#777; padding-top:32px; text-align:center;">
-//                 Keep creating <br>
-//                 <strong style="color:#333;">ReachAI — Smarter YouTube Growth</strong><br>
-//                 <a href="https://crateral-beastlier-kurtis.ngrok-free.dev/" style="color:#E53935; text-decoration:none;">reachaiapp</a>
-//               </td>
-//             </tr>
-
-//           </table>
-//         </td>
-//       </tr>
-//     </table>
-
-//   </body>
-// </html>s`;
-
-
+ `;
 }
 
-/* -------- Escape helpers -------- */
 
-function escapeHtml(str?: string) {
-  if (!str) return "";
+
+
+
+
+
+
+
+
+
+function extractYoutubeId(url?: string): string | null {
+  if (!url) return null;
+  const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+  return match ? match[1] : null;
+}
+
+
+/* ---------- Escape Helpers (DO NOT CHANGE) ---------- */
+
+function escapeHtml(str: string = "") {
   return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
 }
+
+/**
+ * Escape HTML AND convert emojis to numeric entities so they render safely
+ * in email clients (Gmail, Outlook, etc.) without breaking lines weirdly.
+ */
+
+
+
+
+
+
+function escapeHtmlWithEmoji(str: string = "") {
+  if (!str) return "";
+
+  // Just escape HTML entities, keep emojis as-is with proper styling
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/([\p{Extended_Pictographic}\p{Emoji_Component}\u200d]+)/gu, (emoji) => {
+      return `<span style="display:inline-block;line-height:1.2;vertical-align:middle;font-size:16px;">${emoji}</span>`;
+    });
+}
+
+
+
+
+
+
+
+
+
 
 function escapeAttr(str?: string) {
   if (!str) return "";
-  return String(str).replace(/"/g, "%22").replace(/\n/g, "");
+  return String(str)
+    .replace(/"/g,"%22")
+    .replace(/\n/g,"");
 }
+
+
+
+
+// ---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

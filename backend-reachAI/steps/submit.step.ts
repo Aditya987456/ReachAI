@@ -124,7 +124,7 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
           }
         }
 
-        //validate the email using regex or Zod....????
+        //validate the email using regex ...(will do with regex later - v2)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)){
           return {
@@ -177,7 +177,7 @@ export const handler = async (req:any , { emit, logger, state }:any)=>{
 
 
         //---detecting the region of the user.
-        const region = "IN"  //currently its india but will update this.
+        const region = "IN"  //currently its india but will update this. (v2)
 
 
         //creating jobId
