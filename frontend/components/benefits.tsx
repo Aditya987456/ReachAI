@@ -11,6 +11,12 @@ export default function Benefits() {
   <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-red-200 opacity-5 blur-[140px]" />
 
   <div className="max-w-[1350px] mx-auto px-6 lg:px-28 text-center relative z-10">
+
+    <div className="inline-block mb-4 px-4 py-1 bg-red-50 text-red-600 rounded-full text-sm font-semibold">
+            Why Choose Us
+    </div>
+
+
     {/* Title */}
     <h2 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
       Why <span className="text-red-600">ReachAI</span>?

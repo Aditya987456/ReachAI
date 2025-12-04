@@ -28,17 +28,57 @@ export default function Hero() {
       <div className="max-w-[1440px] mx-auto px-6 lg:px-40 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
         {/* LEFT side */}
-        <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-         <span className="px-4 py-1 border border-red-600 bg-red-100 text-red-600 rounded-full text-sm font-semibold">
+        <div className="lg:col-span-7 space-y-7 text-center lg:text-left">
+         
+         {/* <span className="px-4 py-1 border border-red-600 bg-red-100 text-red-600 rounded-full text-sm font-semibold">
           <span className="inline-block w-2 h-2  bg-red-600 rounded-full mr-1 shadow-[0_0_4px_rgba(255,0,0,0.3)] animate-pulse"></span>
           AI optimized
-        </span>
+        </span> */}
+
+
+<span className="px-4 py-1 border border-red-600 bg-red-100 text-red-600 rounded-full text-sm font-semibold inline-flex items-center gap-2">
+  <span className="relative flex h-2 w-2">
+    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+  </span>
+  AI optimized
+</span>
+
 
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-snug lg:leading-tight">
             Boost YouTube Reach with{" "}
             <span className="text-red-600">AI-Powered</span>,{" "}
-            <span className="text-red-600">Trend-Aware</span>{" "}
+
+
+           <span className="relative inline-block text-red-600 pr-2 pb-1">
+  Trend-Aware
+  <svg
+    className="
+      absolute left-0 bottom-0 w-full
+      h-[6px]         
+      sm:h-[7px]       
+      md:h-[8px]       
+      lg:h-[9px]       
+      xl:h-[10px]     
+    "
+    viewBox="0 0 280 10"
+    fill="none"
+    preserveAspectRatio="none"
+  >
+    <path
+      d="M4 6C70 0 210 0 276 6"
+      stroke="#DC2626"
+      strokeWidth="3"
+      strokeLinecap="round"
+    />
+  </svg>
+</span>
+
+
+
+
+            
             Metadata.
           </h1>
 
@@ -46,7 +86,7 @@ export default function Hero() {
             ReachAI analyzes your channel, finds what's trending in your niche,
             and generates SEO-optimized metadata that boosts your YouTube growth.
           </p>
-        </div>
+      </div>
 
         {/*-------- form generate titles right side */}
         <HeroForm/>

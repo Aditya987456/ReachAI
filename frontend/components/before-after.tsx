@@ -5,6 +5,16 @@ export default function BeforeAfter() {
 
     {/* Heading */}
     <div className="text-center max-w-[700px]">
+
+
+      <div className="inline-block mb-4 px-4 py-1 bg-red-50 text-red-600 rounded-full text-sm font-semibold">
+              Real Results
+         </div>
+
+
+
+
+
       <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
         Before <span className="text-gray-400">→</span> <span className="text-red-600">After</span>
       </h2>
@@ -18,8 +28,8 @@ export default function BeforeAfter() {
 
       {/* Header — desktop */}
       <div className="hidden md:grid grid-cols-2 bg-gray-50 border-b border-red-200 text-center">
-        <div className="py-5 font-semibold text-gray-700 border-r border-red-100">Before</div>
-        <div className="py-5 font-semibold text-red-700">After</div>
+        <div className="py-5 font-semibold text-gray-700 border-r border-red-100">😴 Before</div>
+        <div className="py-5 font-semibold text-red-700">🔥 After (AI Optimized)</div>
       </div>
 
       {[
@@ -40,7 +50,7 @@ export default function BeforeAfter() {
           <div className="p-5 md:p-6 md:border-r border-red-100 flex flex-col gap-2">
             {/* Visible labels on sm/md now */}
             <span className="md:hidden inline-block bg-gray-100 text-gray-700 text-xs font-semibold py-1 px-2 rounded-md w-fit">
-              BEFORE
+             😴 BEFORE
             </span>
             <p className="text-gray-700 text-sm sm:text-base md:text-lg font-medium leading-snug">
                “{item.before}”
@@ -50,7 +60,7 @@ export default function BeforeAfter() {
           {/* After */}
           <div className="p-5 md:p-6 flex flex-col gap-2 bg-red-50/10">
             <span className="md:hidden inline-block bg-red-100 text-red-700 text-xs font-semibold py-1 px-2 rounded-md w-fit">
-              AFTER (AI Optimized)
+              🔥 AFTER (AI Optimized)
             </span>
             <p className="text-red-700 text-sm sm:text-base md:text-lg font-semibold leading-snug">
               {item.after}

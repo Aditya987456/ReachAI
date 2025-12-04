@@ -36,13 +36,13 @@ export default function AboutSection() {
 
           <ul className="space-y-3 text-[17px] pt-4 list-none pl-0">
             <li className="flex items-start">
-              <span className="text-red-600 font-bold mr-2 text-xl">⚡</span> Metadata in under 30 seconds
+              <span className="text-red-600 font-bold mr-2 text-xl">-</span> Metadata in seconds
             </li>
             <li className="flex items-start">
-              <span className="text-red-600 font-bold mr-2 text-xl">🚀</span> Tailored to your channel, not generic prompts
+              <span className="text-red-600 font-bold mr-2 text-xl">-</span> Tailored to your channel, not generic prompts
             </li>
             <li className="flex items-start">
-              <span className="text-red-600 font-bold mr-2 text-xl">📌</span> Ready-to-paste titles, tags & descriptions
+              <span className="text-red-600 font-bold mr-2 text-xl">-</span> Ready-to-paste titles, tags & descriptions
             </li>
           </ul>
         </div>
@@ -82,31 +82,30 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* how it works — enhanced modern UI */}
+      {/* How It Works */}
       <div className="relative max-w-4xl mx-auto mt-28 bg-white/80 backdrop-blur-md border border-gray-200 shadow-2xl rounded-2xl p-8 sm:p-10">
         <h3 className="text-2xl font-bold text-center text-gray-900 mb-10">
-          How it works — super simple
+          How ReachAI Works
         </h3>
 
         <div className="relative grid grid-cols-3 gap-8 sm:gap-10 text-center">
-          {/* dotted connector line */}
+
+          {/* Dotted connector */}
           <div className="absolute top-1/2 left-0 right-0 h-1 hidden sm:block">
             <div className="w-full h-full border-t-4 border-dotted border-red-300"></div>
           </div>
 
           {[
-            { icon: "🔗", text: "Enter Channel ID" },
-            { icon: "🧠", text: "AI analyzes trends" },
-            { icon: "📄", text: "Get metadata instantly" },
-          ].map((step, i) => (
+            { title: "Provide Your Channel Handle", desc: "We scan recent uploads & content style." },
+            { title: "ReachAI Analyzes the Niche", desc: "We compare your niche with current trends & competitors." },
+            { title: "Receive Metadata Instantly", desc: "SEO-aligned titles, tags & descriptions ready to paste." },
+          ].map((item, i) => (
             <div
               key={i}
-              className="flex flex-col items-center space-y-3 z-10 bg-white p-3 rounded-xl group"
+              className="flex flex-col items-center space-y-2 z-10 bg-white p-3 rounded-xl group"
             >
-              <span className="text-5xl transition-transform group-hover:scale-110">
-                {step.icon}
-              </span>
-              <p className="font-semibold text-gray-800 text-base">{step.text}</p>
+              <p className="text-base font-bold text-gray-900">{item.title}</p>
+              <p className="text-sm text-gray-600">{item.desc}</p>
             </div>
           ))}
         </div>

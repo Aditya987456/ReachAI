@@ -57,14 +57,6 @@ export default function ContactSection() {
             Message received! We’ll get back to you soon. 😊
           </p>
         )}
-
-        {/* Quick Email Option */}
-        <p className="text-center mt-8 text-gray-600">
-          Prefer email? →{" "}
-          <a href="mailto:adityarajxdev@gmail.com" className="text-red-600 font-semibold hover:underline">
-            adityarajxdev@gmail.com
-          </a>
-        </p>
       </div>
     </section>
   );

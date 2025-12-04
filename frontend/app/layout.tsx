@@ -66,6 +66,7 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import Script from "next/script";  // import Script may for razorpay
 import { Toaster, toast } from 'sonner'   //notification
+import Footer from "@/components/footer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://checkout.razorpay.com/v1/checkout.js" 
           strategy="beforeInteractive"  
         />
+         <Footer/>
       </body>
     </html>
   );
