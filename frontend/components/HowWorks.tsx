@@ -67,7 +67,7 @@ export default function HowWorks() {
                 : "md:w-[calc(50%-4rem)] md:pl-10 order-2"
             }`}
           >
-            <h3 className="font-bold text-base sm:text-lg md:text-xl lg:text-xl mb-1 text-red-600/80">
+            <h3 className="font-bold text-base sm:text-md md:text-lg mb-1 text-red-700">
               {index + 1}. {item.title}
             </h3>
             <p className="text-gray-700">{item.desc}</p>
