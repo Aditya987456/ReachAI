@@ -32,7 +32,20 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
         jobId= data.jobId
         email = data.email
-        const channel = data.channel
+        // const channel = data.channel
+
+//even if user forgot to add @ then we will add that.
+        let input = data.channel.trim()
+
+        if (!input.startsWith("@")) {
+            input = "@" + input
+        }
+
+        const channel = input
+
+
+
+
 
         logger.info('Resolving youtube channel----', {
             jobId, channel

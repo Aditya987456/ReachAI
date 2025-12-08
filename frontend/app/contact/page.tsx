@@ -1,9 +1,52 @@
 "use client";
 
 import { useState } from "react";
-
+import { toast } from "sonner";
 export default function ContactSection() {
-  const [sent, setSent] = useState(false);
+
+  const [loading, setLoading]=useState(false)
+
+  const handleSubmit = async (e:any)=>{
+
+    e.preventDefault();
+    setLoading(true)
+
+    const form = new FormData(e.target)
+
+    try {
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({
+          name: form.get("name"),
+          email: form.get("email"),
+          message: form.get("message"),
+        })
+      });
+
+      const data = await response.json();
+      setLoading(false)
+
+      if (!data.success) {
+        toast.success('Your message has been sent!')
+        e.target.reset(); //##### clean things...
+
+      } else {
+        toast.error("Failed to send message. Try again.");
+      }
+
+
+      
+      
+
+    } catch (error) {
+    // agar network error req hi nahi gaya
+    setLoading(false);
+    toast.error("Something went wrong. Please try again.");
+    console.error("Contact form error:", error);
+  }
+}
 
   return (
     <section id="contact" className="w-full bg-gray-50 py-24 px-6 lg:px-40 border-t">
@@ -17,14 +60,12 @@ export default function ContactSection() {
         </p>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSent(true);
-          }}
+          onSubmit={handleSubmit}
           className="space-y-6"
         >
           <input
             type="text"
+            name="name"
             placeholder="Your Name"
             required
             className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
@@ -32,6 +73,7 @@ export default function ContactSection() {
 
           <input
             type="email"
+            name="email"
             placeholder="Your Email"
             required
             className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
@@ -39,6 +81,7 @@ export default function ContactSection() {
 
           <textarea
             placeholder="Your Message"
+            name="message"
             required
             rows={6}
             className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-red-500"
@@ -46,18 +89,19 @@ export default function ContactSection() {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-red-600 text-white font-semibold text-lg py-3 rounded-xl hover:bg-red-700 transition"
           >
-            Send Message
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
 
-        {sent && (
-          <p className="text-center mt-6 text-green-600 font-semibold animate-pulse">
-            Message received! We’ll get back to you soon. 😊
-          </p>
-        )}
+       
+
       </div>
     </section>
   );
 }
+
+
+

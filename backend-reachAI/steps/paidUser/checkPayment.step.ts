@@ -67,9 +67,11 @@ export const handler = async (req:any , {emit, logger, state }:any)=>{
 
     await state.set("PaidJobs", PaidJobId, {
     ...job,
+
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
+    
     status: isValid ? "payment_verified" : "payment_failed",
     verifiedAt: new Date().toISOString(),
     });

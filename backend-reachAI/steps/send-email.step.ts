@@ -1260,32 +1260,32 @@ const thumb = id
   : escapeAttr(t.thumbnail || "");
 
 return `
+
+
 <!-- ==================== VIDEO CARD ==================== -->
+
 <tr>
 <td style="padding:12px 8px;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;">
-    <tr><td style="padding:12px;">
+  <table width="100%" cellpadding="0" cellspacing="0" 
+    style="border:1px solid #e5e7eb;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;">
+    <tr>
+      <td style="padding:12px;border-radius:10px;">
 
       <!-- CARD HEADER -->
       <table width="100%">
         <tr>
 
-
-
-
-
         <table cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td style="font-size:14px; padding-right:4px">🎬 </td>
-                      <td style="font-size:14px;font-weight:700;color:#111;"> Video ${i+1} </td>
-                    
-                    </tr>
-                </table>
+          <tr>
+            <td style="font-size:14px; padding-right:4px">🎬 </td>
+            <td style="font-size:14px;font-weight:700;color:#111;"> Video ${i+1} </td>
+          </tr>
+        </table>
 
           <td align="right">
             <a href="${urlCTA}"
                style="font-size:12px;color:#d00000;text-decoration:none;font-weight:600;">
-              Preview Full Metadata →
+              Unlock Full Metadata →
             </a>
           </td>
         </tr>
@@ -1317,7 +1317,6 @@ return `
         <tr>
           <td style="font-size:14px;color:#222;padding-top:4px;">
             ${escapeHtmlWithEmoji(t.original)}
-
           </td>
         </tr>
       </table>
@@ -1331,7 +1330,6 @@ return `
           </td>
         </tr>
 
-        <!-- spacing -->
         <tr><td height="6"></td></tr>
 
         <tr>
@@ -1341,7 +1339,6 @@ return `
           </td>
         </tr>
 
-        <!-- spacing -->
         <tr><td height="8"></td></tr>
 
         <tr>
@@ -1364,8 +1361,8 @@ return `
                 <td style="font-size:10px;text-transform:uppercase;color:#9a5000;font-weight:700;">
                   <table cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-size:13px; padding-right:4px">💡</td>
-                      <td style="font-size:13px; color:#92400e;">Why This Works</td>
+                      <td style="font-size:12px; padding-right:4px">💡</td>
+                      <td style="font-size:12px; color:#92400e;">Why This Works</td>
                     </tr>
                 </table>
 
@@ -1373,8 +1370,7 @@ return `
               </tr>
               <tr>
                 <td style="padding-top:4px;font-size:13px;color:#7a3c07;line-height:1.45;">
-                  ${t.Why ? escapeHtmlWithEmoji(t.Why) : ""}
-
+                  ${escapeHtmlWithEmoji(t.Why)}
                 </td>
               </tr>
             </table>
@@ -1384,12 +1380,37 @@ return `
       ` : ""
       }
 
-    </td></tr>
+      </td>
+    </tr>
   </table>
 </td>
 </tr>
 `;
+
 }).join("")}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1397,50 +1418,40 @@ return `
 <!-- ===================================================================== -->
 <!-- ==================== FULL PREMIUM METADATA PREVIEW ================== -->
 <!-- ===================================================================== -->
-
 <tr>
 <td style="padding:20px 8px;">
   <table width="100%" cellpadding="0" cellspacing="0"
-         style="border:1px solid #e5e7eb;border-radius:10px;">
-
+         style="border:1px solid #e5e7eb;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;">
 
     <!-- TOP HERO -->
     <tr>
       <td style="background:#111;border-radius:10px 10px 0 0;padding:16px;text-align:center;">
         <table width="100%">
          
-        
         <tr>
             <td align="center" style="font-size:18px; font-weight:700; color:#ffffff;">
-
-
                 <table cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-size:18px; padding-left:4px">🔓</td>
-                      <td style="font-size:18px;font-weight:700;color:#ffffff;"> Unlock Full Metadata for Your Latest 10 Videos </td>
+                      <td style="font-size:18px; ">🔓</td>
+                      <td style="font-size:18px;font-weight:700;color:#ffffff; padding-right:4px; "> Unlock Complete SEO Data </td>
                     </tr>
                 </table>
-
-               
-
-
             </td>
-          </tr>
+        </tr>
 
-          
-          <tr>
+        <tr>
             <td style="padding-top:4px;font-size:12px;color:#bfbfbf;">
               Titles • Descriptions • Tags • Hashtags
             </td>
-          </tr>
+        </tr>
+
         </table>
       </td>
     </tr>
 
-
 <!-- SAMPLE BLOCK -->
 <tr>
-  <td style="padding:8px;">
+  <td style="padding:8px;border-radius:0 0 10px 10px;">
 
     <!-- HD THUMBNAIL -->
     <table width="100%">
@@ -1466,7 +1477,7 @@ return `
       
       <td style="background:#f9fafb;padding:14px 16px;border-bottom:1px solid #e5e7eb;">
           <span style="font-size:14px;font-weight:700;color:#111;">
-            Complete Metadata Example (Video 1)
+            Video 1 Example:
           </span>
         </td>
 
@@ -1499,15 +1510,25 @@ return `
               Optimized Titles
             </td></tr>
 
+          <table width="100%" 
+            style="background:#fffafa; border-radius:4px;
+                  border-collapse:separate;border-spacing:0;overflow:hidden;">
             <tr>
-              <td style="padding-top:6px;">
-                <table width="100%" style="background:#fffafa;border-left:2px solid #d00000;border-radius:4px;">
-                  <tr><td style="padding:10px;font-size:13px;color:#111;">
-                    Build Your DREAM Gaming PC in 2024 (Step-by-Step Guide)
-                  </td></tr>
-                </table>
+              <td style="padding:8px;font-size:13px;color:#111;">
+                Build Your DREAM Gaming PC in 2024 (Step-by-Step Guide)
               </td>
             </tr>
+          </table>
+
+
+
+          
+
+
+
+
+
+
 
             <tr>
               <td style="padding-top:6px;">
@@ -1525,86 +1546,83 @@ return `
 
           <!-- SEO DESCRIPTION -->
           <table width="100%">
-            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
-              SEO Description
-            </td></tr>
-            <tr>
-              <td style="padding-top:6px;">
-                <table width="100%"
-                       style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;">
-                  <tr><td style="padding:12px;font-size:13px;color:#444;line-height:1.5;">
-                    Want to build your dream gaming PC but don't know where to start? This full beginner-friendly 2024 guide…
-                  </td></tr>
-                </table>
-              </td>
-            </tr>
-          </table>
+  <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+    SEO Description
+  </td></tr>
+  <tr>
+    <td style="padding-top:6px;">
+      <table width="100%"
+        style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;
+               border-collapse:separate;border-spacing:0;overflow:hidden;">
+        <tr><td style="padding:12px;font-size:13px;color:#444;line-height:1.5;">
+          Want to build your dream gaming PC but don't know where to start? This full beginner-friendly 2024 guide…
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
 
 
           <!-- TAGS -->
           <table width="100%" style="margin-top:14px;">
-            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
-              Tags
-            </td></tr>
-            <tr>
-              <td style="padding-top:6px;">
-                <table width="100%"
-                       style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;">
-                  <tr><td style="padding:10px;font-size:12px;color:#444;">
-                    PC Build, Gaming PC, How to Build PC, PC Tutorial
-                  </td></tr>
-                </table>
-              </td>
-            </tr>
-          </table>
+  <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+    Tags
+  </td></tr>
+  <tr>
+    <td style="padding-top:6px;">
+      <table width="100%"
+        style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;
+               border-collapse:separate;border-spacing:0;overflow:hidden;">
+        <tr><td style="padding:10px;font-size:12px;color:#444;">
+          PC Build, Gaming PC, How to Build PC, PC Tutorial
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
 
 
           <!-- HASHTAGS -->
           <table width="100%" style="margin-top:10px;">
-            <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
-              Hashtags
-            </td></tr>
-            <tr>
-              <td style="padding-top:6px;">
-                <table width="100%"
-                       style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;">
-                  <tr><td style="padding:10px;font-size:12px;color:#444;">
-                    #PCBuild #GamingPC #TechTutorial #2024Guide
-                  </td></tr>
-                </table>
-              </td>
-            </tr>
-          </table>
+  <tr><td style="font-size:12px;text-transform:uppercase;font-weight:700;color:#d00000;">
+    Hashtags
+  </td></tr>
+  <tr>
+    <td style="padding-top:6px;">
+      <table width="100%"
+        style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;
+               border-collapse:separate;border-spacing:0;overflow:hidden;">
+        <tr><td style="padding:10px;font-size:12px;color:#444;">
+          #PCBuild #GamingPC #TechTutorial #2024Guide
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
 
 
           <!-- WHY THIS WORKS -->
-          <table width="100%" style="margin-top:14px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;">
-            <tr>
+          <table width="100%" 
+  style="margin-top:14px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;
+         border-collapse:separate;border-spacing:0;overflow:hidden;">
+  <tr>
+    <td style="padding:10px;font-size:13px;color:#784f03;">
+      <span style="font-size:12px;font-weight:700;text-transform:uppercase;color:#92400e;">
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="font-size:12px; padding-right:4px">💡</td>
+            <td style="font-size:12px; color:#92400e;">Why This Works</td>
+          </tr>
+        </table>
+      </span><br>
+      Emotional hook, clear value, beginner-friendly language, and SEO keywords.
+    </td>
+  </tr>
+</table>
 
-
-            
-
-
-
-
-
-
-
-              <td style="padding:10px;font-size:13px;color:#784f03;">
-                <span style="font-size:12px;font-weight:700;text-transform:uppercase;color:#92400e;">
-
-                  <table cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td style="font-size:12px; padding-right:4px">💡</td>
-                      <td style="font-size:12px; color:#92400e;">Why This Works</td>
-                    </tr>
-                </table>
-                
-                </span><br>
-                Emotional hook, clear value, beginner-friendly language, and SEO keywords.
-              </td>
-            </tr>
-          </table>
 
         </td>
       </tr>
@@ -1622,16 +1640,15 @@ return `
       <td style="padding:16px;">
         <table width="100%">
           <tr><td style="font-size:14px;font-weight:700;color:#111;">
-            What You Get
+            Full Metadata Bundle (10 Latest Videos)
           </td></tr>
 
           ${[
-            "Metadata for your latest 10 videos",
-            "2 optimized titles per video",
-            "300+ word SEO descriptions",
+            "2 optimized titles per video(20 titles)",
+            "300+ word SEO-enhanced descriptions",
             "AI-researched tags",
-            "Trending hashtags",
-            "CTR psychology explanations"
+            "Trending hashtags from your niche",
+            "CTR psychology insights to increase clicks"
           ].map(item=>`
           <tr>
             <td style="padding-top:6px;">
@@ -1649,41 +1666,61 @@ return `
 
 
     <!-- CTA -->
-    <tr>
-      <td style="background:#111;padding:30px;text-align:center;border-radius:0 0 10px 10px;">
-        <table width="100%">
-          <tr>
-            <td style="font-size:12px;color:#9ca3af;">
-              Limited-time — 50% OFF
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:10px 0;">
-              <span style="text-decoration:line-through;color:#6b7280;font-size:16px;">₹199</span>
-              <span style="color:#ffffff;font-size:32px;font-weight:800;padding-left:6px;">₹99</span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="${urlCTA}"
-                 style="background:#d00000;color:#fff;padding:12px 40px;font-size:16px;font-weight:700;border-radius:8px;text-decoration:none;display:inline-block;">
-                Unlock Full Metadata →
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding-top:10px;font-size:11px;color:#9ca3af;">
-              Instant delivery • One-time payment • No recurring fees
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+<!-- CTA -->
+<tr>
+  <td style="background:#111;padding:30px;text-align:center;border-radius:0 0 10px 10px;">
+    <table width="100%">
 
+      <!-- Offer Note will add this later - v2-->
+      <tr>
+       
+      </tr>
 
-  </table>
-</td>
+      <!-- Price -->
+      <tr>
+        <td style="padding:10px 0;">
+          <span style="text-decoration:line-through;color:#6b7280;font-size:16px;">₹199</span>
+          <span style="color:#ffffff;font-size:32px;font-weight:800;padding-left:6px;">₹99</span>
+        </td>
+      </tr>
+
+      <!-- 10 Video Line -->
+      <tr>
+        <td style="font-size:12px;color:#d1d5db;padding-bottom:8px;">
+          Full metadata bundle for your latest <strong style="color:#ff0000;">10 videos</strong>
+        </td>
+      </tr>
+
+      <!-- Responsive CTA Button -->
+      <tr>
+        <td>
+          <a href="${urlCTA}"
+             style="
+               background:#d00000;
+               color:#ffffff;
+               padding:14px 0;
+               display:block;
+               width:100%;
+               max-width:260px;
+               margin:0 auto;
+               font-size:16px;
+               font-weight:700;
+               text-decoration:none;
+               border-radius:8px;
+             ">
+            Unlock Full Metadata Now →
+          </a>
+        </td>
+      </tr>
+
+      <!-- Guarantee Text will add this later in V2-->
+      <tr>
+      </tr>
+
+    </table>
+  </td>
 </tr>
+
 
 <!-- FOOTER -->
 <tr>

@@ -19,7 +19,9 @@ declare module 'motia' {
     'FetchLatest-10-videos': EventHandler<never, { topic: 'paidUser.videosfetched.success'; data: never }>
     'fetch-niche': EventHandler<never, { topic: 'yt.niche.fetched'; data: never } | { topic: 'yt.niche.error'; data: never }>
     'Error-handling': EventHandler<never, never>
+    'ContactForm': ApiRouteHandler<Record<string, unknown>, unknown, never>
     'fetch-optimized-titles': EventHandler<never, { topic: 'yt.AI-Title.fetched'; data: never } | { topic: 'yt.AI-Title.error'; data: never }>
+    'RazorpayWebhook': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'paidUser.payment.success'; data: never }>
     'Fetch-Niche': EventHandler<never, { topic: 'paidUser.Nichefetched.success'; data: never }>
     'PaidUser-VerifyPayment': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'paidUser.payment.success'; data: never }>
     'email final metadata ': EventHandler<never, never>

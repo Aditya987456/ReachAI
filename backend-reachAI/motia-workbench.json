@@ -43,8 +43,8 @@
     "id": "optimized-youtube-reach",
     "config": {
       "steps/trending-videos.step.ts": {
-        "x": 826,
-        "y": 33
+        "x": 599,
+        "y": 138
       },
       "steps/submit.step.ts": {
         "x": -17,
@@ -52,40 +52,44 @@
       },
       "steps/send-email.step.ts": {
         "x": 1365,
-        "y": 0
+        "y": -89
       },
       "steps/resolve-channel.step.ts": {
         "x": 267,
         "y": -76
       },
       "steps/fetch-videos.step.ts": {
-        "x": 555,
-        "y": -202
+        "x": 338,
+        "y": -371
       },
       "steps/fetch-niche.step.ts": {
-        "x": 958,
-        "y": -278
+        "x": 1116,
+        "y": -424
       },
       "steps/error-handling.step.ts": {
-        "x": 1623,
-        "y": 105
+        "x": 1612,
+        "y": 402
       },
       "steps/AI-generatedTitles.step.ts": {
-        "x": 489,
-        "y": 221
+        "x": 535,
+        "y": 503
       }
     }
   },
   {
     "id": "Paid User workflow",
     "config": {
+      "steps/paidUser/webhook.step.ts": {
+        "x": -68,
+        "y": -96
+      },
       "steps/paidUser/fetchVideosPaid.step.ts": {
         "x": -111,
         "y": 141
       },
       "steps/paidUser/fetchNichePaid.step.ts": {
-        "x": 186,
-        "y": 293
+        "x": 158,
+        "y": 361
       },
       "steps/paidUser/checkPayment.step.ts": {
         "x": -476,
@@ -100,8 +104,8 @@
         "y": 139
       },
       "steps/paidUser/CreateOrder.step.ts": {
-        "x": -439,
-        "y": -27
+        "x": -519,
+        "y": -72
       },
       "steps/paidUser/AI-generatedMetadata.step.ts": {
         "x": 608,

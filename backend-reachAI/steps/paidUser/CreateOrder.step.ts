@@ -48,6 +48,8 @@ export const handler = async (req:any , {logger, state }:any)=>{
         }
 
 
+
+
     //-----------------------------------------------------------------
 
         const razorpay = new Razorpay({
@@ -57,6 +59,12 @@ export const handler = async (req:any , {logger, state }:any)=>{
 
         const receipt = `reachai_${channelId}_${Date.now()}`.slice(0, 35);;
 
+
+
+        //creating jobId----> for motia state...
+        const PaidJobId = uuidv4();
+
+
         //###### creating razorpay order
         const order = await razorpay.orders.create({
         amount: 99 * 100,
@@ -65,7 +73,8 @@ export const handler = async (req:any , {logger, state }:any)=>{
         notes: {
             email,
             channelId,
-            service: 'youtube_metadata_full'
+            service: 'youtube_metadata_full',
+            PaidJobId                 //sending PaidJobId so we can use in webhook also ....
             }
         })
 
@@ -89,8 +98,7 @@ export const handler = async (req:any , {logger, state }:any)=>{
        
 
 
-        //creating jobId
-        const PaidJobId = uuidv4();
+        
 
         //set the information in this job.-- abhi jo request ua uska ek jobId ban gaya.
         await state.set(`PaidJobs`, PaidJobId , {
