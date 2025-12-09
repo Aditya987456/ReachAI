@@ -52,7 +52,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         }
 
 
-        const emailText = `Sorry, We are facing issune in generating the optimized titles for your channel ${channelName}`
+        const emailText = `Sorry, We are facing issue in generating the optimized titles for your channel ${channelName}, Please try again.`
         
        // const jobData = await state.get('jobs', jobId)
 

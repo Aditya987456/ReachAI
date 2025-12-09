@@ -57,9 +57,17 @@
 
 
 "use client";
+import { useParams } from "next/navigation";
 import React from "react";
 
 export default function ThankYouPage() {
+
+   const params = useParams()
+   const paymentId=params.paymentId
+
+
+
+
   return (
     <section className="w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center py-16 px-4 md:px-0">
       
@@ -132,7 +140,7 @@ export default function ThankYouPage() {
 
         {/* Order Confirmation Number (Optional) */}
         <p className="text-xs text-gray-500 mt-4">
-          Order ID: #{Math.random().toString(36).substr(2, 9).toUpperCase()}
+          Payment ID: { paymentId } 
         </p>
       </div>
     </section>

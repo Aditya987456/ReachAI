@@ -993,7 +993,14 @@ type ImprovedTitle = {
   improved2: string;
   Why?: string;
   url?: string;
-  thumbnail?: string; // <— ADDED
+  thumbnail?: string; // <— ADDED,
+
+
+  premium_metadata?: {
+    description: string;
+    tags: string[];
+    hashtags: string[];
+  };
 };
 
 export const handler = async (eventData: any, { emit, logger, state }: { emit: any; logger: Logger; state: any }) => {
@@ -1024,8 +1031,19 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
     if (!RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
     if (!RESEND_FROM_EMAIL) throw new Error("Missing RESEND_FROM_EMAIL");
 
+
     // Get video data from previous steps
     const jobData = await state.get("jobs", jobId);
+
+
+
+
+
+
+
+
+
+
 
     /**
      * jobData.videos MUST BE AN ARRAY LIKE:
@@ -1035,7 +1053,7 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
      */
     const videoList = jobData?.videos || [];
 
-    // Merge thumbnails into ImprovedTitles
+    // Merge thumbnails + url of video from video list of user into ImprovedTitles
     const titlesWithThumb = ImprovedTitles.map((t, i) => ({
       ...t,
       thumbnail: videoList[i]?.thumbnail || null,
@@ -1043,7 +1061,22 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
     }));
 
 
-    // prevent double send
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // prevent double send-->
     if (jobData?.emailId && jobData?.status === "completed") {
       logger.info("Email already sent — skipping.");
       await emit({
@@ -1053,16 +1086,29 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
       return;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     await state.set("jobs", jobId, {
       ...(jobData || {}),
       status: "sending_email",
       updatedAt: new Date().toISOString(),
     });
 
+
     // Generate email
     const htmlBody = GenerateEmailHTML(
       channelName,
-      titlesWithThumb,
+      titlesWithThumb,     //isme sab hai url, thumb pura.
       channelId,
       email
     );
@@ -1073,6 +1119,28 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
       channelId,
       email
     );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -1126,6 +1194,36 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* -------------------------------------------------------------------
 -------------------- TEXT FALLBACK -----------------------------------
 ---------------------------------------------------------------------*/
@@ -1154,6 +1252,31 @@ export function GenerateEmailTEXT(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ---------------- HTML Email (Version B — Premium UI) ---------------- */
 
 export function GenerateEmailHTML(
@@ -1162,6 +1285,14 @@ export function GenerateEmailHTML(
   channelId: string,
   email: string
 ) {
+
+  const premium = titles[0].premium_metadata;
+  const premiumId = extractYoutubeId(titles[0].url);
+  
+  const premiumThumb = premiumId
+    ? `https://i.ytimg.com/vi/${premiumId}/maxresdefault.jpg`
+    : escapeAttr(titles[0].thumbnail || "");
+
 
   const urlCTA = `${process.env.FRONTEND_URL}/pay/${channelId}?email=${email}`;
 
@@ -1419,7 +1550,7 @@ return `
 <!-- ==================== FULL PREMIUM METADATA PREVIEW ================== -->
 <!-- ===================================================================== -->
 <tr>
-<td style="padding:20px 8px;">
+<td style="padding:20px 6px;">
   <table width="100%" cellpadding="0" cellspacing="0"
          style="border:1px solid #e5e7eb;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;">
 
@@ -1457,7 +1588,7 @@ return `
     <table width="100%">
       <tr>
         <td align="center">
-          <img src="https://i.ytimg.com/vi/sscX432bMZo/maxresdefault.jpg"
+          <img src="${premiumThumb}"
                width="100%" style="max-width:634px;border-radius:8px;">
         </td>
       </tr>
@@ -1497,7 +1628,7 @@ return `
               Original Title
             </td></tr>
             <tr><td style="padding-top:4px;font-size:14px;color:#111;">
-              How to Build a PC in 2024
+              ${escapeHtmlWithEmoji(titles[0].original)}
             </td></tr>
           </table>
 
@@ -1515,7 +1646,8 @@ return `
                   border-collapse:separate;border-spacing:0;overflow:hidden;">
             <tr>
               <td style="padding:8px;font-size:13px;color:#111;">
-                Build Your DREAM Gaming PC in 2024 (Step-by-Step Guide)
+               <span style="font-weight:700;color:#d00000;">1:</span> 
+              ${escapeHtmlWithEmoji(titles[0].improved1)}
               </td>
             </tr>
           </table>
@@ -1532,9 +1664,10 @@ return `
 
             <tr>
               <td style="padding-top:6px;">
-                <table width="100%" style="background:#fffafa;border-left:2px solid #d00000;border-radius:4px;">
+                <table width="100%" style="background:#fffafa; border-radius:4px;">
                   <tr><td style="padding:10px;font-size:13px;color:#111;">
-                    PC Building Made EASY — Complete 2024 Beginner's Guide
+                   <span style="font-weight:700;color:#d00000;">2:</span>  
+                  ${escapeHtmlWithEmoji(titles[0].improved2)}
                   </td></tr>
                 </table>
               </td>
@@ -1554,8 +1687,9 @@ return `
       <table width="100%"
         style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;
                border-collapse:separate;border-spacing:0;overflow:hidden;">
-        <tr><td style="padding:12px;font-size:13px;color:#444;line-height:1.5;">
-          Want to build your dream gaming PC but don't know where to start? This full beginner-friendly 2024 guide…
+        <tr><td style="padding:12px; font-size:13px; color:#444;line-height:1.5;">
+         ${premium?.description || "Error in loading description now."}
+
         </td></tr>
       </table>
     </td>
@@ -1574,8 +1708,8 @@ return `
       <table width="100%"
         style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;
                border-collapse:separate;border-spacing:0;overflow:hidden;">
-        <tr><td style="padding:10px;font-size:12px;color:#444;">
-          PC Build, Gaming PC, How to Build PC, PC Tutorial
+        <tr><td style="padding:10px;font-size:13px;color:#444;">
+          ${(premium?.tags || []).join(", ")}
         </td></tr>
       </table>
     </td>
@@ -1594,8 +1728,8 @@ return `
       <table width="100%"
         style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;
                border-collapse:separate;border-spacing:0;overflow:hidden;">
-        <tr><td style="padding:10px;font-size:12px;color:#444;">
-          #PCBuild #GamingPC #TechTutorial #2024Guide
+        <tr><td style="padding:10px;font-size:13px;color:#444;">
+           ${(premium?.hashtags || []).join(" ")}
         </td></tr>
       </table>
     </td>
@@ -1640,7 +1774,7 @@ return `
       <td style="padding:16px;">
         <table width="100%">
           <tr><td style="font-size:14px;font-weight:700;color:#111;">
-            Full Metadata Bundle (10 Latest Videos)
+            Full Metadata Bundle (  <strong style="color:#ff0000;">10 Latest Videos</strong>)
           </td></tr>
 
           ${[

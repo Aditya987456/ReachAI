@@ -55,7 +55,25 @@ export const handler = async (req: any, { state, logger, emit }: any) => {
     const orderId = payment.order_id;
     const paymentId = payment.id;
     const paymentStatus = payment.status; // "captured", "failed"
-    const PaidJobId = payment.PaidJobId    //we are sending when creating the order...
+    const PaidJobId = payment.notes?.PaidJobId    //we are sending when creating the order...
+
+   
+
+    if (!PaidJobId) {
+      logger.error("Webhook: PaidJobId missing in payment.notes", {
+        paymentId,
+        notes: payment.notes,
+      });
+
+      // Return 200 so Razorpay doesn't spam retries--####
+      return {
+        status: 200,
+        body: { success: true, message: "PaidJobId missing in notes, skipping." },
+      };
+    }
+
+
+
 
     logger.info("Webhook received payment details", {
       event,

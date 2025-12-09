@@ -86,55 +86,127 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
 
 //****** prompt for fetching Optimized AI titles...
-          const TitlePrompt = `
-You are a YouTube SEO + Title Expert.
+//           const TitlePrompt = `
+// You are a YouTube SEO + Title Expert.
+
+// CHANNEL INFO:
+// Name: ${channelName}
+// Detected Niches: ${niche1} and ${niche2}
+// Why this niche: ${reasonNiche}
+
+// FIRST, study the *current trending videos* in this niche to understand trending formats, keywords, and tone.
+// ${TrendingVideos
+//   .map(
+//     (v: any, idx: number) =>
+//       `${idx + 1}. ${v.title} (by ${v.channelTitle})`
+//   )
+//   .join("\n")}
+
+// ---
+
+// CREATOR’S LATEST VIDEOS (for tone and style):
+// ${userVideosList}
+
+// ---
+
+//  **YOUR TASK**
+// For EACH user video title:
+
+// 1. Suggest **2 optimized, trendy, SEO-boosted YouTube titles**  
+// 2. Titles must be based on:  
+//    - The detected niche  
+//    - The trending videos style  
+// 3. Titles must be short, punchy, clickable, emotional & keyword-rich  
+// 4. After the titles → briefly explain **WHY these titles will perform better in 1-2 sentences only**  
+
+// Return the output in JSON formate:
+//     {
+//         "titles": [
+//                 {
+//                     "original": "...",
+//                     "improved1": "...",
+//                     "improved2": "...",
+//                     "Why" : "..."
+//                 }
+//             ]
+//     }
+
+
+
+// (DO NOT add anything else outside this format)
+//     `;
+
+
+// ****** Optimized Prompt for Generating Titles + Premium Metadata Preview ******
+const TitlePrompt = `
+You are a YouTube SEO strategist and Title Optimization expert.
 
 CHANNEL INFO:
 Name: ${channelName}
 Detected Niches: ${niche1} and ${niche2}
-Why this niche: ${reasonNiche}
+Why this niche was detected: ${reasonNiche}
 
-FIRST, study the *current trending videos* in this niche to understand trending formats, keywords, and tone.
-${TrendingVideos
-  .map(
-    (v: any, idx: number) =>
-      `${idx + 1}. ${v.title} (by ${v.channelTitle})`
-  )
-  .join("\n")}
+FIRST analyze the *currently trending videos* in these niches. Learn their:
+- Title formats
+- Emotional hooks
+- Keywords
+- Style & pacing
+- Click triggers
+
+Trending videos reference:
+${TrendingVideos.map((v: any, idx: number) => `${idx + 1}. ${v.title} (by ${v.channelTitle})`).join("\n")}
 
 ---
 
-CREATOR’S LATEST VIDEOS (for tone and style):
+CREATOR’S LATEST VIDEOS (understand tone, voice, and audience expectation):
 ${userVideosList}
 
 ---
 
- **YOUR TASK**
-For EACH user video title:
+### YOUR MAIN TASK
+For **each user video title provided**:
 
-1. Suggest **2 optimized, trendy, SEO-boosted YouTube titles**  
-2. Titles must be based on:  
-   - The detected niche  
-   - The trending videos style  
-3. Titles must be short, punchy, clickable, emotional & keyword-rich  
-4. After the titles → briefly explain **WHY these titles will perform better in 1-2 sentences only**  
+1. Generate **2 optimized, highly clickable, SEO-rich titles**
+2. Every title must follow these rules:
+   - Short, punchy, emotional, keyword-focused
+   - Inspired by niche + trending videos
+   - Must use **ONLY ONE emoji**, placed either at the end or at start of the title
+3. After the titles, write a short **1–2 sentence explanation** of why they will perform better.
 
-Return the output in JSON formate:
+---
+
+### SPECIAL TASK FOR VIDEO #1 (Paid Bundle Preview)
+In addition to the above, also generate:
+
+- **Description (200–250 words)** — engaging, keyword-rich, retention-focused, not less than 150 words.
+- **10–15 Tags** — comma separated, not less than 10-15 
+- **10–15 Hashtags** — sharp, relevant, viral-friendly, title related, not less than 10-15
+
+---
+
+
+### OUTPUT FORMAT (VERY IMPORTANT)
+Return ONLY a valid JSON in this structure:
+
+{
+  "titles": [
     {
-        "titles": [
-                {
-                    "original": "...",
-                    "improved1": "...",
-                    "improved2": "...",
-                    "Why" : "..."
-                }
-            ]
+      "original": "...",
+      "improved1": "...",
+      "improved2": "...",
+      "why": "1–2 sentence explanation",
+      "premium_metadata": {
+          "description": "...",       // ONLY for video #1, otherwise empty or null
+          "tags": ["tag1", "tag2", "..."],          // ONLY for video #1, otherwise empty or null
+          "hashtags": ["#tag1", "#tag2", "..."]    // ONLY for video #1, otherwise empty or null
+      }
     }
+  ]
+}
 
+(DO NOT include anything outside the JSON.)
+`;
 
-
-(DO NOT add anything else outside this format)
-    `;
 
 
 
@@ -192,8 +264,10 @@ Return the output in JSON formate:
         improved1:title.improved1,
         improved2:title.improved2,
         Why:title.Why,
-        url:UserVideos[idx].url
+        url:UserVideos[idx].url,
+        premium_metadata: title.premium_metadata
     }))
+
 
     logger.info('AI optitmized titles generated successfully', {
         jobId,
