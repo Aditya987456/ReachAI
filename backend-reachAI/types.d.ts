@@ -27,5 +27,6 @@ declare module 'motia' {
     'email final metadata ': EventHandler<never, never>
     'PaidUser-CreateOrder': ApiRouteHandler<Record<string, unknown>, unknown, never>
     'fetch-AI-optimized metadata': EventHandler<never, { topic: 'paidUser.AImetadata.success'; data: never }>
+    'get-status': ApiRouteHandler<Record<string, unknown>, unknown, never>
   }
 }

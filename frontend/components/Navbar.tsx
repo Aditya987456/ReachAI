@@ -20,8 +20,8 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-8 text-base font-medium">
-          <Link href="#how" className="hover:text-red-600 transition">How it works</Link>
-          <Link href="#faq" className="hover:text-red-600 transition">FAQ</Link>
+          <Link href="/#how" className="hover:text-red-600 transition">How it works</Link>
+          <Link href="/#faq" className="hover:text-red-600 transition">FAQ</Link>
 
 
           <Link href="about" 
@@ -59,12 +59,12 @@ export default function Navbar() {
         <nav className="flex flex-col gap-4 bg-white px-6 py-5 text-base font-medium border-t border-gray-100">
           
 
-          <Link href="#how" onClick={() => setOpen(false)} className="hover:text-red-600 transition">
+          <Link href="/#how" onClick={() => setOpen(false)} className="hover:text-red-600 transition">
             How it works
           </Link>
 
 
-          <Link href="#faq" onClick={() => setOpen(false)} 
+          <Link href="/#faq" onClick={() => setOpen(false)} 
           className="hover:text-red-600 transition">
             FAQ
           </Link>

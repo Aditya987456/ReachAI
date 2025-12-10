@@ -57,7 +57,7 @@ throw new Error("No user videos found in state or event payload");
         //now setting the everything for the job : jobId the data is {---}
         await state.set('jobs', jobId, {
             ...jobData,
-            status:'fetching niche of channel.'
+            status:'analyzing_niche'
         })
 
 

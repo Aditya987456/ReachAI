@@ -1,12 +1,86 @@
 
 "use client";
-import { useState } from "react";
+import { useJobStatus } from "@/hooks/JobStatus";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+
+
+
+const STATUS_MAP = {
+  resolving_channel: "Connecting to your YouTube channel…",
+  fetching_videos: "Fetching your latest videos…",
+  analyzing_niche: "Understanding your niche and audience…",
+  fetching_trending: "Scanning trending content…",
+  generating_titles: "Generating optimized video titles…",
+  sending_email: "Sending results to your inbox…",
+  completed: "Your optimized titles are on the way! ",
+  failed: "Something went wrong. Please try again ",
+};
+
+
+
+
+
 
 export default function HeroForm() {
   const [email, setEmail] = useState<string>("");
   const [channelId, setChannelId] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
+  //## ye dono yaha hi define kar rahe hai so that we can update from handle form because we are keeping status logic outside the handleform function.
+  const [ jobId, setJobId ] = useState<string | undefined>(undefined)
+  const [ toastId, setToastId ] = useState<any>(null)
+
+
+
+  
+
+
+  //--------------#### updating the toast according to the polling updates whenever status change -
+
+  const status = useJobStatus(jobId)
+
+    useEffect( ()=>{
+
+      if(!status  || !toastId){
+        return;
+      }
+
+      if(status === "completed"){
+        toast.success(STATUS_MAP[status], { id: toastId,  description: undefined })
+        setLoading(false)
+        return
+      }
+
+
+      if(status === "failed"){
+        toast.error(STATUS_MAP[status], { 
+          id: toastId,
+           description: undefined
+         })
+        setLoading(false)
+        return
+      }
+
+
+      //############ i used this before very very important and helpful in this situations...
+      if (STATUS_MAP[status as keyof typeof STATUS_MAP]) {
+    // For in-progress states - NO description
+      toast.loading(STATUS_MAP[status as keyof typeof STATUS_MAP], { 
+        id: toastId,
+        description: undefined  // Remove description for updates
+      });
+      }
+
+
+    }, [status, toastId] )
+
+  
+
+
+
+
 
   const HandleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();     //prevent the form nature on submiting.
@@ -37,6 +111,7 @@ export default function HeroForm() {
       });
 
       const data = await res.json();
+      const jobId = data.jobId
 
     //#####-------- Handle Spam from backend every 3 minutes (429) 
       if (res.status === 429) {
@@ -53,26 +128,62 @@ export default function HeroForm() {
         return;
       }
 
+
+// Stop old polling instantly
+setJobId(undefined);
+
+// Clear old toast
+if (toastId) {
+  toast.dismiss(toastId);
+  setToastId(null);
+}
+
+
+
+
+
+
+
+
     //if no duplication --> means new job created in backend.
       //###defining id here so in next toast msg i will update this.
-       const t = toast.loading('Started generating titles')
+      // Create initial toast
+      const t = toast.loading("Generating your optimized titles…", {
+        description: "This may take around 40–50 seconds.",
+      });
 
-    //--------------now fake notification starts-----------------
-         //after 2.5s
-      setTimeout(() => toast.loading("Checking channel details…", { id: t }), 2500);
-      setTimeout(() => toast.loading("Fetching trending videos…", { id: t }), 5000);
-      setTimeout(() => toast.success("Your titles will arrive shortly. Check inbox or Promotions.", { id: t }), 8000);
 
-      setTimeout(() => {
-        setLoading(false);
-        localStorage.removeItem("reachAI_runs");
-      }, 9000);
+      setToastId(t);   //isi toast me next update karte jana hai...
+      setJobId(jobId);    //from here we pass jobId in polling...
+
+
+
+
+
+    // //--------------now fake notification starts-----------------
+    //      //after 2.5s
+    //   setTimeout(() => toast.loading("Checking channel details…", { id: t }), 2500);
+    //   setTimeout(() => toast.loading("Fetching trending videos…", { id: t }), 5000);
+    //   setTimeout(() => toast.success("Your titles will arrive shortly. Check inbox or Promotions.", { id: t }), 8000);
+
+    //   setTimeout(() => {
+    //     setLoading(false);
+    //     localStorage.removeItem("reachAI_runs");
+    //   }, 9000);
+
+
+
 
     } catch {
       toast.error("Something went wrong. Try again.");
       setLoading(false);
     }
   };
+
+
+
+
+
 
   return (
     <div

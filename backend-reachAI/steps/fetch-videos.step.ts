@@ -58,7 +58,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         //now setting the everything for the job : jobId the data is {---}
         await state.set('jobs', jobId, {
             ...jobData,
-            status:'fetching videos.'
+            status:'fetching_videos'
         })
 
         const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet

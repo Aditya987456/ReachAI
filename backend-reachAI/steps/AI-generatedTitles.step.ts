@@ -71,7 +71,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         //now setting the everything for the job : jobId the data is {---}
         await state.set('jobs', jobId, {
             ...jobData,
-            status:'fetching AI optimized titles'
+            status:'generating_titles'
         })
 
 
