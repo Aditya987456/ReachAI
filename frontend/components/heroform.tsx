@@ -10,13 +10,14 @@ import { toast } from "sonner";
 const STATUS_MAP = {
   resolving_channel: "Connecting to your YouTube channel…",
   fetching_videos: "Fetching your latest videos…",
-  analyzing_niche: "Understanding your niche and audience…",
-  fetching_trending: "Scanning trending content…",
-  generating_titles: "Generating optimized video titles…",
+   analyzing_niche: "Analyzing your niche, audience, and content patterns…",
+   fetching_trending: "Discovering trending topics in your niche…",
+  generating_titles: "Generating SEO-optimized video titles…",
   sending_email: "Sending results to your inbox…",
-  completed: "Your optimized titles are on the way! ",
+   completed: "Your optimized titles are ready! Check your email",
   failed: "Something went wrong. Please try again ",
 };
+
 
 
 
@@ -33,12 +34,15 @@ export default function HeroForm() {
   const [ toastId, setToastId ] = useState<any>(null)
 
 
+const resetJobState = () => {
+  setJobId(undefined);   // stops polling
+  setToastId(null);      // removes stale toast reference
+};
 
   
 
 
   //--------------#### updating the toast according to the polling updates whenever status change -
-
   const status = useJobStatus(jobId)
 
     useEffect( ()=>{
@@ -57,7 +61,7 @@ export default function HeroForm() {
       if(status === "failed"){
         toast.error(STATUS_MAP[status], { 
           id: toastId,
-           description: undefined
+          description: undefined
          })
         setLoading(false)
         return
@@ -84,7 +88,7 @@ export default function HeroForm() {
 
   const HandleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();     //prevent the form nature on submiting.
-
+resetJobState();
     if (loading){
       toast.error("Already started generating... please wait");
       return 
@@ -95,7 +99,7 @@ export default function HeroForm() {
       return
     }
       
-//if everything ok matlab - start the loading in button like loader...
+  //if everything ok matlab - start the loading in button like loader...
     setLoading(true);
 
   //job started saving in local storage.
@@ -129,18 +133,6 @@ export default function HeroForm() {
       }
 
 
-// Stop old polling instantly
-setJobId(undefined);
-
-// Clear old toast
-if (toastId) {
-  toast.dismiss(toastId);
-  setToastId(null);
-}
-
-
-
-
 
 
 
@@ -148,13 +140,31 @@ if (toastId) {
     //if no duplication --> means new job created in backend.
       //###defining id here so in next toast msg i will update this.
       // Create initial toast
-      const t = toast.loading("Generating your optimized titles…", {
-        description: "This may take around 40–50 seconds.",
-      });
+      // const t = toast.loading("Generating your optimized titles…", {
+      //   description: "This may take around 40–50 seconds.",
+      // });
 
 
-      setToastId(t);   //isi toast me next update karte jana hai...
-      setJobId(jobId);    //from here we pass jobId in polling...
+      // 1. Clear OLD toast instantly to prevent flicker/overlap
+    if (toastId) {
+      toast.dismiss(toastId);
+      // We don't need setToastId(null) here, as we immediately set the new ID next.
+    }
+
+
+    // 2. Create the NEW initial toast immediately
+    const t = toast.loading("Generating your optimized titles…", {
+      description: "This may take around 40–50 seconds.",
+    });
+
+
+    // 3. Set the new IDs. This simultaneously:
+    //    a) Updates the toast reference for the useEffect block (setToastId)
+    //    b) Starts the polling for the new job (setJobId)
+    setToastId(t);   
+    setJobId(jobId);
+
+
 
 
 
