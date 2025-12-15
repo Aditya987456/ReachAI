@@ -81,6 +81,15 @@
     }
   },
   {
+    "id": "get-status-live",
+    "config": {
+      "steps/get-status.step.ts": {
+        "x": -24,
+        "y": 6
+      }
+    }
+  },
+  {
     "id": "optimized-youtube-reach",
     "config": {
       "steps/trending-videos.step.ts": {
@@ -114,15 +123,10 @@
       "steps/AI-generatedTitles.step.ts": {
         "x": 535,
         "y": 503
-      }
-    }
-  },
-  {
-    "id": "get-status-live",
-    "config": {
-      "steps/get-status.step.ts": {
-        "x": -24,
-        "y": 6
+      },
+      "steps/.motia/compiled/fetch-niche.step.js": {
+        "x": 673,
+        "y": 147
       }
     }
   }

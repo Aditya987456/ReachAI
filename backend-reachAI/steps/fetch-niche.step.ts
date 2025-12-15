@@ -186,6 +186,7 @@ throw new Error("No user videos found in state or event payload");
             error:error.message
         })
 
+        
         await emit({
             topic:"yt.niche.error",
             data:{
