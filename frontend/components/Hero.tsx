@@ -30,7 +30,7 @@ export default function Hero() {
           md:max-w-3xl
           lg:max-w-4xl 
           md:mx-auto
-          lg:space-y-9
+          lg:space-y-7
           "
         >
           {/* AI optimized - badge*/}
@@ -39,7 +39,7 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
             </span>
-            AI optimized
+            AI-Optimized for YouTube
           </span>
 
           {/* Heading */}

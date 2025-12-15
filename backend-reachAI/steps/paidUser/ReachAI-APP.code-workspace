@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../ReachAI-APP"
+		},
+		{
+			"name": "ReachAI",
+			"path": "../../.."
+		}
+	],
+	"settings": {}
+}

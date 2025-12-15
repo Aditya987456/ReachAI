@@ -467,7 +467,7 @@ export default function BuyMetadataPage() {
 
             const verifyData = await verifyRes.json();
             if (verifyData.success) {
-              toast.success("Payment successful! Redirecting to thank you page...");
+              toast.success("Payment successful! 🎉");
               router.push(`/thank-you/${response.razorpay_payment_id}`);
 
             } else {

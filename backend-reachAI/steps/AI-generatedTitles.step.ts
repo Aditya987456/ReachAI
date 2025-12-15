@@ -181,6 +181,7 @@ In addition to the above, also generate:
 - **Description (200–250 words)** — engaging, keyword-rich, retention-focused, not less than 150 words.
 - **10–15 Tags** — comma separated, not less than 10-15 
 - **10–15 Hashtags** — sharp, relevant, viral-friendly, title related, not less than 10-15
+- ** WHY THIS WORKS ** - A short 2-3 sentence explanation of the psychology + SEO behind your titles, description, tags and hashtags. 
 
 ---
 
@@ -199,6 +200,7 @@ Return ONLY a valid JSON in this structure:
           "description": "...",       // ONLY for video #1, otherwise empty or null
           "tags": ["tag1", "tag2", "..."],          // ONLY for video #1, otherwise empty or null
           "hashtags": ["#tag1", "#tag2", "..."]    // ONLY for video #1, otherwise empty or null
+          "Why_premium": "2-3 sentence explanation"  // ONLY for video #1, otherwise empty or null
       }
     }
   ]
@@ -263,7 +265,7 @@ Return ONLY a valid JSON in this structure:
         original:title.original,
         improved1:title.improved1,
         improved2:title.improved2,
-        Why:title.Why,
+        Why:title.why,
         url:UserVideos[idx].url,
         premium_metadata: title.premium_metadata
     }))

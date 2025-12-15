@@ -95,7 +95,7 @@ resetJobState();
     } 
 
     if (!channelId.trim() || !email.trim()){
-      toast.error("Please fill all the fields.");
+      toast.error(<div className="md:text-sm">Please fill all the fields.</div>);
       return
     }
       

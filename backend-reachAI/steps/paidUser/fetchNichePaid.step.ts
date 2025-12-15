@@ -11,7 +11,16 @@ export const config= {
     type:'event',
     subscribes:["paidUser.videosfetched.success"],
     emits:["paidUser.Nichefetched.success", "paidUser.Nichefetched.error"],
-    flows: ['Paid User workflow']
+    flows: ['Paid User workflow'],
+    infrastructure: {
+        handler: { 
+            timeout: 30  // yt not respond give up after 30s
+        },
+        queue: { 
+            maxRetries: 3,  // try 3 times if failed
+            visibilityTimeout: 60  // wait 60s then again try
+        }
+    }
 }
 
 
@@ -20,7 +29,8 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
     let PaidJobId:string | undefined
     let email:string | undefined
-    
+    const MAX_RETRIES = 4;
+    const RETRY_KEY = "fetchNiche";
 
 
     try {
@@ -33,6 +43,18 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         const channelId = data.channelId
         const UserVideos = data.videos
 
+
+        if (!PaidJobId || !email || UserVideos.length === 0) {
+           throw new Error("Missing required event data");
+        }
+
+
+        const PaidJobData = await state.get('PaidJobs', PaidJobId)
+        if(!PaidJobData) throw new Error("PaidJob not found");
+
+
+        
+
         logger.info('Resolving youtube channel niche --> ', {
             PaidJobId,
             channelId,
@@ -44,23 +66,51 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
             throw new Error("Openai api key not configured")
         }
 
-        const PaidJobData = await state.get('PaidJobs', PaidJobId)
+        
+
 
 // //------using from the state we can also fetch the videos of the user
 // const UserVideos = jobData.videos
 
-        if (!UserVideos) {
-        throw new Error("No user videos found in state or event payload");
+        // if (!UserVideos) {
+        // throw new Error("No user videos found in state or event payload");
+        // }
+
+
+
+
+        //######## ----- checking niche before again retrying ------ ##########
+        if(PaidJobData.nicheFetched === true){
+            logger.info("Niche already detected, next event-", {
+                PaidJobId
+            })
+
+            await emit({
+                topic: "paidUser.Nichefetched.success",
+                data: {
+                    PaidJobId,
+                    email,
+                    channelId,
+                    channelName,
+                    niches:PaidJobData.niches,
+                    reason:PaidJobData.reason
+                }
+            })
+
+            return;
         }
+
+
+
 
 
         //now setting the status before starting fetching niche.
         await state.set('PaidJobs', PaidJobId, {
             ...PaidJobData,
-            status:'fetching niche of the channel.'
+            status:'fetching_niche'
         })
 
-             //prompt for analyzing the niche.
+    //prompt for analyzing the niche.
         const userPrompt = `
             You are an expert in YouTube content analysis.
 
@@ -135,7 +185,8 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
     //   channelName,
     //   email,
     ...PaidJobData,
-      status: "niche detected",
+      status: "niche_detected",
+      nicheFetched:true,
       niches: parsed.niches,     //2 -niches
       reason: parsed.reason,
     });
@@ -154,29 +205,70 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
     });
 
     } catch (error:any) {
-        logger.error('Error in fetching Niche of the channel ', { error:error.message})
+        logger.error('Error in fetching Niche of the channel ', { error:error.message, PaidJobId})
 
         if(!PaidJobId  ||  !email){
-            logger.error("Cannot send error notification - missing jobId or email")
-            return
+            logger.error("Cannot send error notification - missing PaidJobId or email")
+            throw error;
         }
 
-        const PaidJobData = await state.get('PaidJobs', PaidJobId)
 
-        await state.set('PaidJobs', PaidJobId,{
-            ...PaidJobData,
-            status:'failed',
-            error:error.message
-        })
+        try {
 
-        await emit({
-            topic:"paidUser.Nichefetched.error",
-            data:{
-                PaidJobId,
-                email,
-                error:'failed to fetch channel niche.Please try again'
+
+            const PaidJobData = await state.get('PaidJobs', PaidJobId)
+            const attempt = (PaidJobData?.retry?.[RETRY_KEY]??0)+1
+
+            await state.set('PaidJobs', PaidJobId,{
+                ...PaidJobData,
+                status:'retrying',
+                lastError:error.message,
+                retry: {
+                    ...PaidJobData?.retry,
+                    [RETRY_KEY]: attempt
+                } 
+            });
+
+
+            if(attempt >= MAX_RETRIES){
+                await emit({
+                topic:"paidUser.Nichefetched.error",
+                data:{
+                    PaidJobId,
+                    email,
+                    error: error.message,
+                    attemptCount: attempt
+                    }
+                })
+                return;
             }
-        })
+
+            throw error;   //retry...
+            
+        } catch (stateError: any) {
+            logger.error("State failure during niche retry", {
+                stateError: stateError.message,
+                PaidJobId
+            });
+
+            if (email) {
+                await emit({
+                topic: "paidUser.Nichefetched.error",
+                data: {
+                    PaidJobId,
+                    email,
+                    error: error.message,
+                    reasonError: "state_unavailable"
+                }
+                });
+                return;
+            }
+
+            throw error;
+    }
+
         
     }
 }
+
+

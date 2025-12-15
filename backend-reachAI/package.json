@@ -2,6 +2,7 @@
   "name": "ReachAI",
   "description": "",
   "version": "1.0.0",
+   "type": "module",
   "scripts": {
     "postinstall": "motia install",
     "dev": "motia dev",
@@ -14,7 +15,7 @@
   ],
   "dependencies": {
     "crypto": "^1.0.1",
-    "motia": "^0.8.2-beta.139",
+    "motia": "^0.17.6-beta.187",
     "razorpay": "^2.9.6",
     "uuid": "^13.0.0",
     "zod": "^3.24.4"

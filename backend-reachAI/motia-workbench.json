@@ -40,11 +40,52 @@
     }
   },
   {
+    "id": "Paid User workflow",
+    "config": {
+      "steps/paidUser/webhook.step.ts": {
+        "x": -487,
+        "y": -1
+      },
+      "steps/paidUser/paidUser-errorHandling.step.ts": {
+        "x": 1587,
+        "y": 110
+      },
+      "steps/paidUser/fetchVideosPaid.step.ts": {
+        "x": -100,
+        "y": 130
+      },
+      "steps/paidUser/fetchNichePaid.step.ts": {
+        "x": 164,
+        "y": 381
+      },
+      "steps/paidUser/checkPayment.step.ts": {
+        "x": -476,
+        "y": 194
+      },
+      "steps/paidUser/TrendingVidPaidUser.step.ts": {
+        "x": 335,
+        "y": 130
+      },
+      "steps/paidUser/SendEmail-PaidUser.step.ts": {
+        "x": 799,
+        "y": 123
+      },
+      "steps/paidUser/CreateOrder.step.ts": {
+        "x": -826,
+        "y": 87
+      },
+      "steps/paidUser/AI-generatedMetadata.step.ts": {
+        "x": 580,
+        "y": 392
+      }
+    }
+  },
+  {
     "id": "optimized-youtube-reach",
     "config": {
       "steps/trending-videos.step.ts": {
-        "x": 599,
-        "y": 138
+        "x": 705,
+        "y": 151
       },
       "steps/submit.step.ts": {
         "x": -17,
@@ -55,8 +96,8 @@
         "y": -89
       },
       "steps/resolve-channel.step.ts": {
-        "x": 267,
-        "y": -76
+        "x": 272,
+        "y": 171
       },
       "steps/fetch-videos.step.ts": {
         "x": 338,
@@ -77,39 +118,11 @@
     }
   },
   {
-    "id": "Paid User workflow",
+    "id": "get-status-live",
     "config": {
-      "steps/paidUser/webhook.step.ts": {
-        "x": -68,
-        "y": -96
-      },
-      "steps/paidUser/fetchVideosPaid.step.ts": {
-        "x": -111,
-        "y": 141
-      },
-      "steps/paidUser/fetchNichePaid.step.ts": {
-        "x": 158,
-        "y": 361
-      },
-      "steps/paidUser/checkPayment.step.ts": {
-        "x": -476,
-        "y": 194
-      },
-      "steps/paidUser/TrendingVidPaidUser.step.ts": {
-        "x": 358,
-        "y": 141
-      },
-      "steps/paidUser/SendEmail-PaidUser.step.ts": {
-        "x": 863,
-        "y": 139
-      },
-      "steps/paidUser/CreateOrder.step.ts": {
-        "x": -519,
-        "y": -72
-      },
-      "steps/paidUser/AI-generatedMetadata.step.ts": {
-        "x": 608,
-        "y": 361
+      "steps/get-status.step.ts": {
+        "x": -24,
+        "y": 6
       }
     }
   }

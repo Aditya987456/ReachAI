@@ -11,7 +11,16 @@ export const config= {
     type:'event',
     subscribes:["paidUser.trendVid.success"],
     emits:["paidUser.AImetadata.success", "paidUser.AImetadata.error"],
-    flows: ['Paid User workflow']
+    flows: ['Paid User workflow'],
+    infrastructure: {
+        handler: { 
+            timeout: 30  // yt not respond give up after 30s
+        },
+        queue: { 
+            maxRetries: 3,  // try 3 times if failed
+            visibilityTimeout: 60  // wait 60s then again try
+        }
+    }
 }
 
 
@@ -19,6 +28,8 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
     let PaidJobId:string | undefined
     let email:string | undefined
+    const MAX_RETRIES = 3;
+    const RETRY_KEY = "fetchAiMetadata";
 
     try {
 
@@ -29,21 +40,44 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         const channelId = data.channelId
         const channelName = data.channelName
         const TrendingVideos = data.TrendingVideos
+        
 
 
-        logger.info('Fetching AI optimized titles --> ', {
-            PaidJobId,
-            channelId
-        })
 
-        const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-        if(!OPENAI_API_KEY){
-            throw new Error("Openai api key not configured")
+        if (!PaidJobId || !email) {
+           throw new Error("Missing required event data");
         }
+
 
         const PaidJobData = await state.get('PaidJobs', PaidJobId)
 
-//------using from the state
+        if (!PaidJobData) {
+            throw new Error("PaidJob not found");
+        }
+
+
+    //######## ----- checking AI metadata before again generating ------ ##########
+        if(PaidJobData.AiMetadatafetched === true){
+            logger.info("AI metadata already generated, next event-", {
+                PaidJobId
+            })
+
+            await emit({
+                topic: "paidUser.AImetadata.success",
+                data: {
+                    PaidJobId,
+                    email,
+                    channelId,
+                    channelName,
+                    ImprovedMetadataData:PaidJobData.ImprovedMetadataData,
+                }
+            })
+
+            return;
+        }
+
+        
+    //------------- using from the state---------------
         const UserVideos = PaidJobData.videos
         if (!UserVideos) {
             throw new Error("No user videos found in state or event payload");
@@ -53,11 +87,34 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
         const reasonNiche = PaidJobData.reason
 
 
+        const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+        if(!OPENAI_API_KEY){
+            throw new Error("Openai api key not configured")
+        }
+
+
+        
+
+
+
+        logger.info('Fetching AI optimized titles --> ', {
+            PaidJobId,
+            channelId
+        })
+        
+
+
     //list of videos of user with titles and description from the channel
         // const userVideosList = UserVideos
         // .map((v: any, idx: number) =>
         //     `${idx + 1}. "${v.title}"\n   "${v.description}"`)
         // .join("\n");
+
+
+
+
+
+
 
 
 
@@ -371,7 +428,8 @@ Return ONLY valid JSON — no trailing commas, no markdown fences.
     await state.set('PaidJobs', PaidJobId, {
 
     ...PaidJobData,
-      status: "Titles ready",
+      status: "AI metadata ready",
+      AiMetadatafetched:true,
       ImprovedMetadataData
     });
 
@@ -411,22 +469,62 @@ Return ONLY valid JSON — no trailing commas, no markdown fences.
             return
         }
 
-        const PaidJobData = await state.get('PaidJobs', PaidJobId)
 
-        await state.set('PaidJobs', PaidJobId,{
+        try {
+
+            const PaidJobData = await state.get('PaidJobs', PaidJobId)
+            const attempt = (PaidJobData?.retry?.[RETRY_KEY]??0)+1
+
+            await state.set('PaidJobs', PaidJobId,{
             ...PaidJobData,
-            status:'failed',
-            error:error.message
-        })
-
-        await emit({
-            topic:"paidUser.AImetadata.error",
-            data:{
-                PaidJobId,
-                email,
-                error:'failed to fetch the AI optimized titles.Please try again'
+            status:'retrying',
+            lastError:error.message,
+            retry: {
+                ...PaidJobData?.retry,
+                [RETRY_KEY]:attempt
             }
         })
+
+        if(attempt >= MAX_RETRIES){
+                await emit({
+                topic:"paidUser.AImetadata.error",
+                data:{
+                    PaidJobId,
+                    email,
+                    error: error.message,
+                    attemptCount: attempt
+                    }
+                })
+                return;
+            }
+
+        
+        throw error;
+            
+            
+        } catch (stateError: any) {
+            logger.error("State failure during AI metadata retry", {
+                stateError: stateError.message,
+                PaidJobId
+            });
+
+            if(email){
+                await emit({
+                topic:"paidUser.AImetadata.error",
+                data:{
+                    PaidJobId,
+                    email,
+                    reasonError: "state_unavailable",
+                    error: error.message,
+                }
+                 })
+                 return;
+            }
+
+            throw error;
+            
+        }
+
         
     }
 
