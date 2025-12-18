@@ -1,0 +1,105 @@
+[
+  {
+    "id": "basic-tutorial",
+    "config": {
+      "src/petstore/state-audit-cron.step.ts": {
+        "x": -175,
+        "y": 219,
+        "sourceHandlePosition": "right"
+      },
+      "src/petstore/process-food-order.step.ts": {
+        "x": 144,
+        "y": 17,
+        "sourceHandlePosition": "bottom"
+      },
+      "src/petstore/notification.step.ts": {
+        "x": 331,
+        "y": 261,
+        "sourceHandlePosition": "bottom"
+      },
+      "src/petstore/api.step.ts": {
+        "x": -175,
+        "y": 3,
+        "sourceHandlePosition": "right"
+      }
+    }
+  },
+  {
+    "id": "Paid User workflow",
+    "config": {
+      "src/paidUser/webhook.step.ts": {
+        "x": -719,
+        "y": -260
+      },
+      "src/paidUser/paidUser-errorHandling.step.ts": {
+        "x": 485,
+        "y": 558
+      },
+      "src/paidUser/fetchVideosPaid.step.ts": {
+        "x": -237,
+        "y": -156
+      },
+      "src/paidUser/fetchNichePaid.step.ts": {
+        "x": 169,
+        "y": 21
+      },
+      "src/paidUser/checkPayment.step.ts": {
+        "x": -725,
+        "y": -20
+      },
+      "src/paidUser/TrendingVidPaidUser.step.ts": {
+        "x": 510,
+        "y": -228
+      },
+      "src/paidUser/SendEmail-PaidUser.step.ts": {
+        "x": 1529,
+        "y": -372
+      },
+      "src/paidUser/CreateOrder.step.ts": {
+        "x": -731,
+        "y": 209
+      },
+      "src/paidUser/AI-generatedMetadata.step.ts": {
+        "x": 949,
+        "y": -394
+      }
+    }
+  },
+  {
+    "id": "optimized-youtube-reach",
+    "config": {
+      "src/freeUser/trending-videos.step.ts": {
+        "x": 979,
+        "y": -258
+      },
+      "src/freeUser/submit.step.ts": {
+        "x": 0,
+        "y": 71
+      },
+      "src/freeUser/send-email.step.ts": {
+        "x": 1443,
+        "y": 77
+      },
+      "src/freeUser/resolve-channel.step.ts": {
+        "x": 224,
+        "y": -105
+      },
+      "src/freeUser/fetch-videos.step.ts": {
+        "x": 417,
+        "y": 84
+      },
+      "src/freeUser/fetch-niche.step.ts": {
+        "x": 617,
+        "y": -234
+      },
+      "src/freeUser/error-handling.step.ts": {
+        "x": 1353,
+        "y": -141
+      },
+      "src/freeUser/AI-generatedTitles.step.ts": {
+        "x": 1061,
+        "y": 259
+      }
+    }
+  }
+]

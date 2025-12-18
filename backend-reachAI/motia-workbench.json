@@ -40,47 +40,6 @@
     }
   },
   {
-    "id": "Paid User workflow",
-    "config": {
-      "steps/paidUser/webhook.step.ts": {
-        "x": -487,
-        "y": -1
-      },
-      "steps/paidUser/paidUser-errorHandling.step.ts": {
-        "x": 1587,
-        "y": 110
-      },
-      "steps/paidUser/fetchVideosPaid.step.ts": {
-        "x": -100,
-        "y": 130
-      },
-      "steps/paidUser/fetchNichePaid.step.ts": {
-        "x": 164,
-        "y": 381
-      },
-      "steps/paidUser/checkPayment.step.ts": {
-        "x": -476,
-        "y": 194
-      },
-      "steps/paidUser/TrendingVidPaidUser.step.ts": {
-        "x": 335,
-        "y": 130
-      },
-      "steps/paidUser/SendEmail-PaidUser.step.ts": {
-        "x": 799,
-        "y": 123
-      },
-      "steps/paidUser/CreateOrder.step.ts": {
-        "x": -826,
-        "y": 87
-      },
-      "steps/paidUser/AI-generatedMetadata.step.ts": {
-        "x": 580,
-        "y": 392
-      }
-    }
-  },
-  {
     "id": "get-status-live",
     "config": {
       "steps/get-status.step.ts": {
@@ -123,10 +82,47 @@
       "steps/AI-generatedTitles.step.ts": {
         "x": 535,
         "y": 503
+      }
+    }
+  },
+  {
+    "id": "Paid User workflow",
+    "config": {
+      "steps/paidUser/webhook.step.ts": {
+        "x": -487,
+        "y": -1
       },
-      "steps/.motia/compiled/fetch-niche.step.js": {
-        "x": 673,
-        "y": 147
+      "steps/paidUser/paidUser-errorHandling.step.ts": {
+        "x": 1017,
+        "y": 644
+      },
+      "steps/paidUser/fetchVideosPaid.step.ts": {
+        "x": -118,
+        "y": 108
+      },
+      "steps/paidUser/fetchNichePaid.step.ts": {
+        "x": 166,
+        "y": 212
+      },
+      "steps/paidUser/checkPayment.step.ts": {
+        "x": -476,
+        "y": 194
+      },
+      "steps/paidUser/TrendingVidPaidUser.step.ts": {
+        "x": 402,
+        "y": 36
+      },
+      "steps/paidUser/SendEmail-PaidUser.step.ts": {
+        "x": 1201,
+        "y": 137
+      },
+      "steps/paidUser/CreateOrder.step.ts": {
+        "x": -826,
+        "y": 87
+      },
+      "steps/paidUser/AI-generatedMetadata.step.ts": {
+        "x": 752,
+        "y": -54
       }
     }
   }
