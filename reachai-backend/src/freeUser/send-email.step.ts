@@ -22,7 +22,7 @@ type ImprovedTitle = {
   improved2: string;
   Why?: string;
   url?: string;
-  thumbnail?: string; // <— ADDED,
+  thumbnail?: string; 
   premium_metadata?: {
     description: string;
     tags: string[];
@@ -42,16 +42,61 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
     email = data.email;
     const channelName: string = data.channelName;
     const channelId: string = data.channelId;
-    const ImprovedTitles: ImprovedTitle[] = data.ImprovedTitles || [];
 
     logger.info("send-email-with-titles triggered", { jobId, email });
+
 
     if (!jobId) throw new Error("Missing jobId");
     if (!email) throw new Error("Missing email");
     if (!channelId) throw new Error("Missing channelId");
     if (!channelName) throw new Error("Missing channelName");
-    if (!ImprovedTitles?.length)
-      throw new Error("ImprovedTitles empty");
+    
+
+
+    
+
+
+
+    // firstly- from emit data - not trusting becz sometime not give full info
+    let ImprovedTitles: ImprovedTitle[] = data.ImprovedTitles || [];
+
+    // secondly from state like - from db.
+    if (!ImprovedTitles || ImprovedTitles.length === 0) {
+      logger.warn('no titles in emit data now trying from state.', { jobId });
+      
+      const jobData = await state.get('jobs', jobId);
+      ImprovedTitles = jobData?.ImprovedTitles || [];
+      
+      if (!ImprovedTitles || ImprovedTitles.length === 0) {
+        throw new Error('No Improved titles found.');
+      }
+      
+      logger.info('Successfully retrieved titles from state', { 
+        jobId, 
+        count: ImprovedTitles.length 
+      });
+
+    } else {
+      logger.info('Improvedtitles we using from emit data----', { 
+        jobId, 
+        count: ImprovedTitles.length 
+      });
+    }
+
+    // only need 5 titles here----> GPT, checking during error.
+    if (ImprovedTitles.length !== 5) {
+      logger.warn(`Expected 5 titles, got ${ImprovedTitles.length}. Adjusting...`, { jobId });
+    }
+
+    const finalTitles = ImprovedTitles.slice(0, 5);
+
+    if (finalTitles.length === 0) {
+      throw new Error("No titles to send after validation");
+    }
+
+
+
+
 
     const RESEND_API_KEY = process.env.RESEND_API_KEY;
     const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
@@ -60,53 +105,27 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
     if (!RESEND_FROM_EMAIL) throw new Error("Missing RESEND_FROM_EMAIL");
 
 
+
+
+
     // Get video data from previous steps
     const jobData = await state.get("jobs", jobId);
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * jobData.videos MUST BE AN ARRAY LIKE:
-     * [
-     *   { thumbnail: "...", url: "...", title: "...", ...},
-     * ]
-     */
     const videoList = jobData?.videos || [];
+    const first5Videos = videoList.slice(0, 5);
 
     // Merge thumbnails + url of video from video list of user into ImprovedTitles
-    const titlesWithThumb = ImprovedTitles.map((t, i) => ({
+    const titlesWithThumb = finalTitles.map((t, i) => ({
       ...t,
-      thumbnail: videoList[i]?.thumbnail || null,
-      url: videoList[i]?.url || t.url
+      thumbnail: first5Videos[i]?.thumbnail || null,
+      url: first5Videos[i]?.url || t.url
     }));
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
     // prevent double send-->
     if (jobData?.emailId && jobData?.status === "completed") {
-      logger.info("Email already sent — skipping.");
+      logger.info("Email already sent — skipping.", { jobId, emailId: jobData.emailId });
       await emit({
         topic: "yt.titles.Email-Send",
         data: { jobId, email, emailId: jobData.emailId, alreadySent: true },
@@ -200,6 +219,12 @@ export const handler = async (eventData: any, { emit, logger, state }: { emit: a
     await emit({
       topic: "yt.titles.Email-Send",
       data: { jobId, email, emailId },
+    });
+
+    logger.info("******Email sent successfully*******", { 
+      jobId, 
+      emailId,
+      videoCount: titlesWithThumb.length 
     });
 
   } catch (err: any) {
