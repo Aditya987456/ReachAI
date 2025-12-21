@@ -28,7 +28,7 @@ export function useJobStatus(jobId?: string | undefined) {
                 setStatus(LiveStatus);
 
                 // Check LiveStatus (the NEW value), not status (OLD value)
-                if (LiveStatus === "completed" || LiveStatus === "failed") {
+                if (LiveStatus === "completed" || LiveStatus === "failed" || LiveStatus === "failed_channel") {
                     clearInterval(PollingInterval);
                 }
                 

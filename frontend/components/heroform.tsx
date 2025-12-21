@@ -10,11 +10,12 @@ import { toast } from "sonner";
 const STATUS_MAP = {
   resolving_channel: "Connecting to your YouTube channel…",
   fetching_videos: "Fetching your latest videos…",
-   analyzing_niche: "Analyzing your niche, audience, and content patterns…",
-   fetching_trending: "Discovering trending topics in your niche…",
+  analyzing_niche: "Analyzing your niche, audience, and content patterns…",
+  fetching_trending: "Discovering trending topics in your niche…",
   generating_titles: "Generating SEO-optimized video titles…",
   sending_email: "Sending results to your inbox…",
-   completed: "Your optimized titles are ready! Check your email",
+  completed: "Your optimized titles are ready! Check your email",
+  failed_channel: "Error in resolving channel. Enter correct channel handle",
   failed: "Something went wrong. Please try again ",
 };
 
@@ -53,6 +54,16 @@ const resetJobState = () => {
 
       if(status === "completed"){
         toast.success(STATUS_MAP[status], { id: toastId,  description: undefined })
+        setLoading(false)
+        return
+      }
+
+      //if anyone entered wrong channel...spam.
+      if(status === "failed_channel"){
+        toast.error(STATUS_MAP[status], { 
+          id: toastId,
+          description: undefined
+         })
         setLoading(false)
         return
       }
@@ -120,7 +131,7 @@ resetJobState();
     //#####-------- Handle Spam from backend every 3 minutes (429) 
       if (res.status === 429) {
         toast.error(`Please wait ${data.waitSeconds} seconds`, {
-          description: "Limit: 1 request per 3 minutes.",
+          description: "Limit: 1 request per email every 3 minutes.",
         });
         setLoading(false);
         return;

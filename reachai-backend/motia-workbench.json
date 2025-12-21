@@ -68,6 +68,10 @@
         "x": -719,
         "y": -260
       },
+      "src/paidUser/retry-manual.step.ts": {
+        "x": -638,
+        "y": 449
+      },
       "src/paidUser/paidUser-errorHandling.step.ts": {
         "x": 1377,
         "y": 303
@@ -93,8 +97,8 @@
         "y": -372
       },
       "src/paidUser/CreateOrder.step.ts": {
-        "x": -731,
-        "y": 209
+        "x": -777,
+        "y": 228
       },
       "src/paidUser/AI-generatedMetadata.step.ts": {
         "x": 808,

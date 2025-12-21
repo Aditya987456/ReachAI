@@ -110,7 +110,7 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
 
             await state.set('jobs', jobId,{
                 ...jobData,
-                status:'failed',
+                status:'failed_channel',
                 error:'channel not found'
             });
 

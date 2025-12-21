@@ -194,7 +194,7 @@ For **EXACTLY THESE 5 VIDEOS ONLY** (NO MORE, NO LESS):
 2. Every title must follow these rules:
    - Short, punchy, emotional, keyword-focused
    - Inspired by niche + trending videos
-   - Must use **ONLY ONE emoji**, placed either at the end or at start of the title
+   - Must use **ONLY ONE emoji**, placed either at the end of the title
 3. After the titles, write a short **1–2 sentence explanation** of why they will perform better.
 
 ---
@@ -203,8 +203,8 @@ For **EXACTLY THESE 5 VIDEOS ONLY** (NO MORE, NO LESS):
 For the FIRST video only, also generate:
 
 - **Description (200–250 words)** — engaging, keyword-rich, retention-focused, not less than 150 words.
-- **10–15 Tags** — comma separated, not less than 10-15 
-- **10–15 Hashtags** — sharp, relevant, viral-friendly, title related, not less than 10-15
+- **10–15 Tags** — comma separated, EXACTLY 10-15 high-intent SEO tags
+- **10–15 Hashtags** — sharp, relevant, viral-friendly, title related, EXACTLY 10-15 high-intent SEO hastags
 - **WHY THIS WORKS** - A short 2-3 sentence explanation why these titles and metadata work better. 
 
 ---

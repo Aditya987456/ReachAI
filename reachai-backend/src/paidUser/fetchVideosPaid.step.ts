@@ -5,7 +5,7 @@
 //step-3: fetch the latest 10 videos using channelId.
 
 
-import { EventConfig, Logger } from "motia";
+//import { EventConfig, Logger } from "motia";
 
 
 export const config  = {

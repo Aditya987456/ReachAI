@@ -337,25 +337,41 @@ export function GenerateEmailHTMLPaid(
 
 
 
-    <table cellpadding="0" cellspacing="0">
-      <tr>
-        <td style="font-size:14px;color:#555;line-height:1.6;">
-          Your complete AI-powered SEO metadata bundle for your youtube channel
-          <strong style="color:#111;">${escapeHtmlWithEmoji(channelName)}</strong>
-          is ready!
-        </td>
-        <td style="font-size:14px;padding-left:4px;">🎉</td>
-      </tr>
-    </table>
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td
+      style="
+        font-size:14px;
+        color:#555;
+        line-height:20px;
+        vertical-align:middle;
+        font-family: Arial, Helvetica, sans-serif;
+      "
+    >
+      Your complete AI-powered SEO metadata bundle for your YouTube channel
+      <strong style="color:#111;">
+        ${escapeHtmlWithEmoji(channelName)}
+      </strong>
+      is ready! 
+    </td>
+    
+  </tr>
+</table>
 
-    <table cellpadding="0" cellspacing="0">
-      <tr>
-        <td style="font-size:14px;color:#555;line-height:1.6;">
-          Each video includes optimized titles, descriptions, tags, hashtags, and strategic insights.
-        </td>
-      </tr>
-    </table>
-
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td
+      style="
+        font-size:14px;
+        color:#555;
+        line-height:20px;
+        font-family: Arial, Helvetica, sans-serif;
+      "
+    >
+      Each video includes optimized titles, descriptions, tags, hashtags, and strategic insights.
+    </td>
+  </tr>
+</table>
 
 
 
@@ -399,7 +415,7 @@ ${MetadataWithThumb.map((t, i) => {
 
 const id = extractYoutubeId(t.url);
 const thumb = id
-  ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` 
+  ? `https://i.ytimg.com/vi/${id}/sddefault.jpg` 
   : escapeAttr(t.thumbnail || "");
 
 return `
@@ -569,39 +585,16 @@ return `
 
 }).join("")}
 
+
+
 <!-- =================================== THANK YOU SECTION =================================== -->
-<tr>
-  <td style="padding:20px 8px;">
-      <table width="100%" cellpadding="0" cellspacing="0"
-            style="background:#111;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;">
-        <tr>
-          <td style="padding:30px;text-align:center;">
-            <table width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-      <td style="font-size:20px;font-weight:700;color:#ffffff;padding-bottom:8px;">
-        You're All Set!
-      </td>
-      <td style="font-size:20px;font-weight:700;color:#ffffff;padding-bottom:8px;padding-left:4px;">
-        🎉
-      </td>
-    </tr>
-  </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-      <td style="font-size:14px;color:#d1d5db;line-height:1.6;">
-        Use these optimized titles, descriptions, tags, and hashtags to boost your video performance.
-        <br><br>
-        Want metadata for more videos? Come back anytime!
-      </td>
-    </tr>
-  </table>
 
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
+
+
+
+
+
 
 <!-- =================================== SUGGESTIONS SECTION =================================== -->
 <tr>
@@ -626,7 +619,7 @@ return `
           <table width="100%">
             <tr>
               <td style="font-size:14px;color:#444;line-height:1.6;padding-bottom:12px;">
-                We're constantly improving ReachAI to serve you better! Your feedback helps us build features that matter most to creators like you.
+               Your feedback helps us build features that matter most to creators like you.
               </td>
             </tr>
             <tr>
@@ -672,7 +665,7 @@ return `
                       <table>
                         <tr>
                           <td width="18" style="color:#d00000;font-size:14px;">•</td>
-                          <td style="font-size:13px;color:#444;">Any bugs or issues you encountered</td>
+                          <td style="font-size:13px;color:#444;">Any <strong style="color:#d00000">bugs or issues</strong> you encountered</td>
                         </tr>
                       </table>
                     </td>

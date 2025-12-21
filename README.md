@@ -176,3 +176,70 @@ NO  → drop event forever
 
 
 
+
+```
+
+//will use this code later--
+
+<tr>
+  <td style="padding:20px 8px;">
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="
+        background:#111;
+        border-radius:10px;
+        border-collapse:separate;
+        border-spacing:0;
+        overflow:hidden;
+      "
+    >
+      <tr>
+        <td style="padding:30px;text-align:center;">
+
+          <!-- Heading -->
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td
+                style="
+                  font-size:20px;
+                  font-weight:700;
+                  color:#ffffff;
+                  padding-bottom:8px;
+                  line-height:26px;
+                  font-family: Arial, Helvetica, sans-serif;
+                "
+              >
+                You're All Set! <span style="line-height:26px;">🎉</span>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Description -->
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td
+                style="
+                  font-size:14px;
+                  color:#d1d5db;
+                  line-height:22px;
+                  font-family: Arial, Helvetica, sans-serif;
+                "
+              >
+                Use these optimized titles, descriptions, tags, and hashtags to boost your video performance.
+                <br><br>
+                Want metadata for more videos? Come back anytime!
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+```
+
+

@@ -13,6 +13,7 @@ declare module 'motia' {
 
   interface Handlers {
     'RazorpayWebhook': ApiRouteHandler<Record<string, unknown>, unknown, { topic: 'paidUser.payment.success'; data: never }>
+    'ManualRetryJob': ApiRouteHandler<Record<string, unknown>, unknown, never>
     'PaidUser-ErrorHandler': EventHandler<never, never>
     'PaidJob-FetchLatest-10-videos': EventHandler<never, { topic: 'paidUser.videosfetched.success'; data: never } | { topic: 'paidUser.videosfetched.error'; data: never }>
     'PaidJob-Fetch-Niche': EventHandler<never, { topic: 'paidUser.Nichefetched.success'; data: never } | { topic: 'paidUser.Nichefetched.error'; data: never }>

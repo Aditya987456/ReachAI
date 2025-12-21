@@ -28,13 +28,15 @@ export const handler = async (eventData:any , { emit, logger, state }:any)=>{
     let email:string | undefined
 
     try {
-
+        
         const data = eventData || {}
-
         jobId= data.jobId
-        email = data.email
-        const channelName = data.channelName
-        const channelId = data.channelId
+
+        const jobData = await state.get('jobs', jobId)
+
+        email = data.email ||  jobData.email
+        const channelName = data.channelName  ||  jobData.channelName
+        const channelId = data.channelId     ||  jobData.channelID
         const error = data.error
 
 

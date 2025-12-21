@@ -1,6 +1,6 @@
 //  ---  this is the event 
 
-import { EventConfig, Logger } from "motia";
+//import { EventConfig, Logger } from "motia";
 
 // for notify that error caught
 
@@ -65,11 +65,8 @@ export const handler = async ( eventData: any, { logger, emit, state }: any ) =>
 
 const emailText = `
         Sorry! There is an issue while processing your request for your channel ${channelName}, Something went wrong during processing.
-
         But if your payment was successful then contact us we will help you as soon as possible.
-
         Contact support: https://reachaiapp.online/contact
-
         Please include your Payment ID and this Job ID when contacting support:
         ${PaidJobId}
             `.trim()

@@ -440,7 +440,7 @@ ${titles.map((t, i) => {
 
 const id = extractYoutubeId(t.url);
 const thumb = id
-  ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
+  ? `https://i.ytimg.com/vi/${id}/sddefault.jpg`
   : escapeAttr(t.thumbnail || "");
 
 return `
@@ -832,8 +832,8 @@ return `
           </td></tr>
 
           ${[
-            "2 optimized titles per video(20 titles)",
-            "200+ word SEO-enhanced descriptions",
+            "2 optimized titles per video (20 titles)",
+            "150+ word SEO-enhanced descriptions",
             "AI-researched tags",
             "Trending hashtags from your niche",
             "CTR psychology insights to increase clicks"
