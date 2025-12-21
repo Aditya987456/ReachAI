@@ -1,6 +1,156 @@
 
 
-### Important concepts during building this project.
+
+# ReachAI — AI-Powered & Trend-driven YouTube Metadata 
+
+ReachAI is an AI-powered backend system that helps YouTube creators improve discoverability by generating trend-aware, SEO-optimized metadata for their videos.
+
+The platform automates the full workflow — from fetching channel data to delivering optimized metadata — using an event-driven backend architecture built with Motia.dev. A minimal Next.js frontend is used only for job submission, payments, and status visibility.
+
+Creators can purchase a full metadata bundle for 10 videos at ₹99, with results delivered via email.
+
+---
+
+## 💡 Product Overview
+
+ReachAI is designed for creators who want structured, data-driven metadata without spending hours on manual research.  
+The system focuses on reliability and clarity by separating each step of the workflow into independent backend events.
+
+---
+
+## 💰 Pricing
+
+| Plan | Details | Price |
+|------|--------|-------|
+| Free titles | for latest 5 videos two titles for each |  **₹0** |
+| Full Metadata Bundle | Titles, descriptions, tags, hashtags & reasoning for **10 videos** | **₹99** |
+
+<br>
+
+- Payments are handled securely using Razorpay.  
+- The backend workflow starts only after a verified payment event.
+
+
+
+<br>
+<br>
+<br>
+
+
+
+## ⚙️ Tech Stack
+
+### Backend
+- Motia.dev — Event-driven workflow orchestration
+- TypeScript
+- Node.js
+- YouTube Data API
+- AI (LLM for metadata generation)
+- Email service (Resend email)
+- Razorpay Webhooks
+
+### Frontend
+- Next.js  
+- Minimal UI for job submission and status updates
+
+
+<br>
+<br>
+<br>
+
+
+
+## 🧱 Architecture Overview
+
+ReachAI uses an event-driven backend architecture where each step is implemented as an independent Motia event.
+
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Important concepts during building this project. --  my notes.
 * state = backend storage → “keep everything safe for later.”
 
 * emit = visible output → “show/send only the important part now.”
@@ -25,7 +175,7 @@ index → position of the item (always starts from 0)
 
 
 
-### Why use <Link> instead of <li> or <a>?
+### Why use link instead of li(list) or anchor tag(a). 
 > Benefits:
 
 ✔ Single-page navigation
