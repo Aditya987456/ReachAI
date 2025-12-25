@@ -125,10 +125,10 @@ type TabItem = {
 
 
   const tabs : TabItem[] = [
-    { id: 'titles', label: '📝 Titles' },
-    { id: 'descriptions', label: '📄 Descriptions'},
-    { id: 'tags', label: '🏷️ Tags' },
-    { id: 'hashtags', label: '#️⃣ Hashtags' },
+    { id: 'titles', label: 'Titles' },
+    { id: 'descriptions', label: 'Descriptions'},
+    { id: 'tags', label: 'Tags' },
+    { id: 'hashtags', label: 'Hashtags' },
   ];
 
 

@@ -28,24 +28,25 @@ export default function Hero() {
           
           /* --- LG ONLY CHANGES --- */
           md:max-w-3xl
-          lg:max-w-4xl 
+          lg:max-w-6xl 
           md:mx-auto
           lg:space-y-7
           "
         >
           {/* AI optimized - badge*/}
-          <span className="px-4 py-1 border border-red-600 bg-red-100 text-red-600 rounded-full text-sm font-semibold inline-flex items-center gap-2 mx-auto xl:mx-0">
+          <span className="px-4 py-1  border-red-600 bg-red-100 text-red-600 rounded-full text-sm font-semibold inline-flex items-center gap-2 mx-auto xl:mx-0">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
             </span>
-            AI-Optimized for YouTube
+            AI-Optimized for Creators
           </span>
 
           {/* Heading */}
           <h1 className="
             text-3xl sm:text-4xl md:text-5xl 
-            font-extrabold leading-snug xl:leading-tight 
+            font-extrabold leading-snug sm:leading-normal
+            md:leading-snug
             max-w-2xl mx-auto xl:mx-0
 
             /* lg+ screen width increase. */

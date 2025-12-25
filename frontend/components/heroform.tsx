@@ -232,7 +232,7 @@ resetJobState();
         </h2>
 
         <div className="flex justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 border border-red-200 rounded-full">
+          <div className="inline-flex items-center gap-2 px-2 py-1 md:px-4 md:py-1.5 bg-red-50 border border-red-200 rounded-full">
             <span className="h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
             <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">
               100% FREE — No Signup

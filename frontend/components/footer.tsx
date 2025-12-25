@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-black text-gray-300 py-14">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-[1440px] lg:px-28 mx-auto px-6">
 
         {/* Logo + short description */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-10">
