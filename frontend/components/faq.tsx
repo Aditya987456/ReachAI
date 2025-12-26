@@ -8,9 +8,9 @@ export default function FAQ() {
 
   const faqs = [
     { q: "How does ReachAI generate the metadata?", a: "ReachAI analyzes trending videos in your niche and generates optimized titles, tags and descriptions using hooks that increase CTR." },
-    { q: "Do I need to connect my YouTube account?", a: "No. Only channel ID and email are required. No login or OAuth requested." },
+    { q: "Do I need to connect my YouTube account?", a: "No. Only channel handle (starts with '@') and email are required. No login or OAuth requested." },
     { q: "Can I test it for free?", a: "Yes — sample metadata is free. The full optimized metadata unlocks after payment." },
-    { q: "How fast do I receive the results?", a: "Within 15–30 seconds after submitting your channel details." },
+    { q: "How fast do I receive the results?", a: "Within 20–30 seconds after submitting your channel details." },
     { q: "Does it work for any niche?", a: "Yes — gaming, tech, fitness, vlogs, motivation, finance, etc." },
   ];
 

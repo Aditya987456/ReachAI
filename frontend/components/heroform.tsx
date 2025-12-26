@@ -164,8 +164,8 @@ resetJobState();
 
 
     // 2. Create the NEW initial toast immediately
-    const t = toast.loading("Generating your optimized titles…", {
-      description: "This may take around 40–50 seconds.",
+    const t = toast.loading("Starting your task...", {
+      description: "This may take around 20–30 seconds.",
     });
 
 

@@ -67,6 +67,7 @@ import "./globals.css";
 import Script from "next/script";  // import Script may for razorpay
 import { Toaster, toast } from 'sonner'   //notification
 import Footer from "@/components/footer";
+import { Analytics } from "@vercel/analytics/next"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
